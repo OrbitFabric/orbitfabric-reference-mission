@@ -214,7 +214,7 @@
     "execution_attempt_id",
     "authorized_instance",
     "runtime",
-    "occurrence_criteriterion",
+    "occurrence_criterion",
     "preconditions",
     "presentations",
     "execution_occurrences",
