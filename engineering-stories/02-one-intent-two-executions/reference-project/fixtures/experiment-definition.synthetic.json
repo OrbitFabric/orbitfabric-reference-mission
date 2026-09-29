@@ -1,0 +1,29 @@
+{
+  "authorized_instance": {
+    "expected_execution_count": 1,
+    "local_id": "health-check-once",
+    "scope": "execution_attempt"
+  },
+  "experiment": {
+    "id": "r2-g0-health-check",
+    "version": "0.1"
+  },
+  "format_version": "0.1-story",
+  "kind": "orbitfabric.reference_mission.pwnsat_experiment_definition",
+  "projection": {
+    "integration_result_sha256": "670ebeb1e3c6fe2b6e5c4cd7f076c9d78bfe49a6f994294bbd62bc6de21dee1c",
+    "mapping_id": "synthetic.r2-g0.mapping-not-produced",
+    "scenario_accounting_artifact_id": "synthetic.r2-g0.accounting-not-produced",
+    "stimulus_artifact_id": "synthetic.r2-g0.stimulus-not-produced",
+    "synthetic": true
+  },
+  "provenance": {
+    "note": "G0-only fixture. Projection identities are deterministic placeholders; G1 artifacts and runtime evidence do not exist.",
+    "synthetic": true
+  },
+  "scenario": {
+    "atom_id": "atom-0003",
+    "id": "r2_g0_health_check",
+    "sha256": "62a6e33afca19a29fa7357cd9c773481b77536bc7b6470575f6f4b8c7aedca27"
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "$id": "orbitfabric.reference_mission.pwnsat_execution_observation/0.1-story",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assessment": {
+      "enum": [
+        "CONFORMANT",
+        "DIVERGED",
+        "INCONCLUSIVE",
+        "INVALID_RUN"
+      ]
+    },
+    "authorized_instance": {
+      "additionalProperties": false,
+      "properties": {
+        "authorized_invocation_id": {
+          "pattern": "^r2a:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "local_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "local_id",
+        "authorized_invocation_id"
+      ],
+      "type": "object"
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+            "type": "string"
+          },
+          "message": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "evidence_status": {
+      "enum": [
+        "complete",
+        "insufficient",
+        "ambiguous"
+      ]
+    },
+    "execution_attempt_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "type": "string"
+    },
+    "execution_occurrences": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "type": "boolean"
+          },
+          "authorized_invocation_id": {
+            "pattern": "^r2a:[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "authorized_invocation_id",
+          "accepted"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "expected_execution_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "experiment_definition_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "format_version": {
+      "const": "0.1-story"
+    },
+    "kind": {
+      "const": "orbitfabric.reference_mission.pwnsat_execution_observation"
+    },
+    "observed_execution_count": {
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "occurrence_criterion": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true
+        },
+        "version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "synthetic"
+      ],
+      "type": "object"
+    },
+    "preconditions": {
+      "additionalProperties": false,
+      "properties": {
+        "identity_binding_valid": {
+          "type": "boolean"
+        },
+        "reason": {
+          "minLength": 1,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "identity_binding_valid",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "presentations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "authorized_invocation_id": {
+            "pattern": "^r2a:[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "authorized_invocation_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "producer": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "runtime": {
+      "additionalProperties": false,
+      "properties": {
+        "runtime_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true
+        }
+      },
+      "required": [
+        "synthetic",
+        "runtime_id"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "kind",
+    "format_version",
+    "producer",
+    "experiment_definition_sha256",
+    "execution_attempt_id",
+    "authorized_instance",
+    "runtime",
+    "occurrence_criteriterion",
+    "preconditions",
+    "presentations",
+    "execution_occurrences",
+    "evidence_status",
+    "expected_execution_count",
+    "observed_execution_count",
+    "assessment",
+    "diagnostics"
+  ],
+  "title": "R2 PWNSAT Execution Observation Report",
+  "type": "object"
+}

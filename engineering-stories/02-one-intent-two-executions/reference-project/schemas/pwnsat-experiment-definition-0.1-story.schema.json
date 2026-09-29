@@ -1,0 +1,136 @@
+{
+  "$id": "orbitfabric.reference_mission.pwnsat_experiment_definition/0.1-story",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authorized_instance": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_execution_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "local_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "scope": {
+          "const": "execution_attempt"
+        }
+      },
+      "required": [
+        "local_id",
+        "scope",
+        "expected_execution_count"
+      ],
+      "type": "object"
+    },
+    "experiment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "format_version": {
+      "const": "0.1-story"
+    },
+    "kind": {
+      "const": "orbitfabric.reference_mission.pwnsat_experiment_definition"
+    },
+    "projection": {
+      "additionalProperties": false,
+      "properties": {
+        "integration_result_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "mapping_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "scenario_accounting_artifact_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "stimulus_artifact_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true
+        }
+      },
+      "required": [
+        "synthetic",
+        "integration_result_sha256",
+        "mapping_id",
+        "scenario_accounting_artifact_id",
+        "stimulus_artifact_id"
+      ],
+      "type": "object"
+    },
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true
+        }
+      },
+      "required": [
+        "synthetic",
+        "note"
+      ],
+      "type": "object"
+    },
+    "scenario": {
+      "additionalProperties": false,
+      "properties": {
+        "atom_id": {
+          "pattern": "^atom-[0-9]{4,}$",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "sha256",
+        "atom_id"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "kind",
+    "format_version",
+    "experiment",
+    "scenario",
+    "projection",
+    "authorized_instance",
+    "provenance"
+  ],
+  "title": "R2 PWNSAT Experiment Definition",
+  "type": "object"
+}

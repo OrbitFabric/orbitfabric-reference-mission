@@ -1,0 +1,45 @@
+{
+  "assessment": "CONFORMANT",
+  "authorized_instance": {
+    "authorized_invocation_id": "r2a:99eff943f7ed861ed8fd07e260e356c996aa927994132a8bc8ef3c537d800c9d",
+    "local_id": "health-check-once"
+  },
+  "diagnostics": [],
+  "evidence_status": "complete",
+  "execution_attempt_id": "attempt-conformant",
+  "execution_occurrences": [
+    {
+      "accepted": true,
+      "authorized_invocation_id": "r2a:99eff943f7ed861ed8fd07e260e356c996aa927994132a8bc8ef3c537d800c9d",
+      "id": "occurrence-1"
+    }
+  ],
+  "expected_execution_count": 1,
+  "experiment_definition_sha256": "489e538c1a88525b2ce06ed2681cfc5e5110685e177cdaf2a59660144489d8f1",
+  "format_version": "0.1-story",
+  "kind": "orbitfabric.reference_mission.pwnsat_execution_observation",
+  "observed_execution_count": 1,
+  "occurrence_criterion": {
+    "id": "r2-g0.synthetic.accepted-occurrence",
+    "synthetic": true,
+    "version": "0.1"
+  },
+  "preconditions": {
+    "identity_binding_valid": true,
+    "reason": null
+  },
+  "presentations": [
+    {
+      "authorized_invocation_id": "r2a:99eff943f7ed861ed8fd07e260e356c996aa927994132a8bc8ef3c537d800c9d",
+      "id": "presentation-1"
+    }
+  ],
+  "producer": {
+    "id": "r2-g0-synthetic-observer",
+    "version": "0.1"
+  },
+  "runtime": {
+    "runtime_id": "synthetic-g0-no-external-runtime",
+    "synthetic": true
+  }
+}
