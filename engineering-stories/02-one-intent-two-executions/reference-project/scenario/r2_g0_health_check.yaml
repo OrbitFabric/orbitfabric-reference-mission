@@ -1,0 +1,17 @@
+scenario:
+  id: r2_g0_health_check
+  name: R2 G0 health-check authorization
+  description: >
+    Story-local G0 Scenario used only to bind one canonical Reference Mission
+    health-check command to an exact Core Scenario Declaration atom.
+
+mission:
+  path: ../../../../mission
+
+initial_state:
+  mode: NOMINAL
+  telemetry: {}
+
+steps:
+  - t: 1
+    command: obc.request_health_check
