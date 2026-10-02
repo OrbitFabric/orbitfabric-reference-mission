@@ -48,6 +48,47 @@ class G1ProjectionUnitTests(unittest.TestCase):
             },
         )
 
+    def test_source_baseline_does_not_own_fixed_sequence_count(self):
+        profile, baseline, projection = self._current_inputs()
+        packet = baseline["packet_projection"]
+        self.assertNotIn("sequence_count", packet)
+        self.assertEqual(
+            packet["sequence_counter"],
+            {
+                "field_bits": 14,
+                "initial_value": 0,
+                "increment": "before_packet_construction",
+                "stateful": True,
+                "fixed_source_constant": False,
+            },
+        )
+        self.assertEqual(
+            projection["sequence_count"],
+            profile["settings"]["sequence_count"],
+        )
+        self.assertEqual(projection["sequence_count"], 1)
+
+    def test_retained_artifacts_bind_exact_source_baseline_identity(self):
+        source_sha = g1.sha256_file(g1.TARGET_BASELINE_PATH)
+        self.assertEqual(
+            source_sha,
+            "b6e5a6d04a37d1fb29dd2c00f1c81d22cfae65626564160b2fa11dd80cc4ca5e",
+        )
+        mapping = g1.load_json(g1.RETAINED_DIR / g1.MAPPING_FILENAME)
+        result = g1.load_json(g1.RETAINED_DIR / g1.RESULT_FILENAME)
+        self.assertEqual(
+            mapping["target_baseline"]["source_baseline_sha256"],
+            source_sha,
+        )
+        self.assertEqual(
+            result["evidence"][0]["source_baseline_sha256"],
+            source_sha,
+        )
+        self.assertEqual(
+            result["resolutions"][0]["source_baseline_sha256"],
+            source_sha,
+        )
+
     def test_profile_binds_exact_canonical_command(self):
         profile, _ = g1.load_profile()
         binding = profile["bindings"][0]

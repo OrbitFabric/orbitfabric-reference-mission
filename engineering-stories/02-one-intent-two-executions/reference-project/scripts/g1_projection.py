@@ -167,6 +167,20 @@ def validate_target_baseline(value: dict[str, Any]) -> None:
     if not value.get("projection_scope"):
         raise G1Error("target projection scope is not explicit")
     packet = value.get("packet_projection") or {}
+    if "sequence_count" in packet:
+        raise G1Error(
+            "PWNSAT source baseline must not assert a fixed Story-authored sequence_count"
+        )
+    counter = packet.get("sequence_counter") or {}
+    expected_counter = {
+        "field_bits": 14,
+        "initial_value": 0,
+        "increment": "before_packet_construction",
+        "stateful": True,
+        "fixed_source_constant": False,
+    }
+    if counter != expected_counter:
+        raise G1Error("unexpected PWNSAT TC sequence-counter semantics")
     secure = packet.get("secure_link") or {}
     expected = {
         "ccsds_version": 0,

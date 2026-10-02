@@ -38,6 +38,6 @@
   "target_baseline": {
     "commit_sha": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
     "repository": "Pwnsat/FlatSat",
-    "source_baseline_sha256": "c59c14baad64aafad7b9d42f02516343d61f8bb9185b75797ccfb214396526cf"
+    "source_baseline_sha256": "b6e5a6d04a37d1fb29dd2c00f1c81d22cfae65626564160b2fa11dd80cc4ca5e"
   }
 }

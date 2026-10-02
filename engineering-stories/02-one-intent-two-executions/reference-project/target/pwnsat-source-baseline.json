@@ -26,7 +26,8 @@
       "establishes": [
         "CCSDS SPP primary header is 6 bytes",
         "TC packet type is 1",
-        "unsegmented sequence flag is 3"
+        "unsegmented sequence flag is 3",
+        "sequence count occupies the low 14 bits of the packet sequence field"
       ]
     },
     {
@@ -34,7 +35,10 @@
       "blob_sha": "a5ec274e7f3b2fd72da432ff4211d30c809e6131",
       "establishes": [
         "primary-header packet id and sequence fields are packed big-endian",
-        "packet length field is data length plus secondary-header length minus one"
+        "packet length field is data length plus secondary-header length minus one",
+        "the TC packet counter is initialized to zero",
+        "the TC packet counter is incremented before packet construction",
+        "the TC packet counter wraps through the firmware counter-validation logic"
       ]
     },
     {
@@ -59,7 +63,13 @@
     "packet_type": "TC",
     "secondary_header": false,
     "sequence_flags": 3,
-    "sequence_count": 1,
+    "sequence_counter": {
+      "field_bits": 14,
+      "initial_value": 0,
+      "increment": "before_packet_construction",
+      "stateful": true,
+      "fixed_source_constant": false
+    },
     "secure_link": {
       "enabled": true,
       "algorithm": "AES-128-ECB",
