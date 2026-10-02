@@ -1,0 +1,26 @@
+kind: orbitfabric.projection_profile
+profile_version: 0.1-candidate
+profile:
+  id: r2-pwnsat-flatsat-health-check
+  version: 0.1.0
+  description: R2 G1 Story-local projection of the canonical OBC health-check request to FlatSat STATUS.
+integration:
+  id: orbitfabric-r2-pwnsat-story
+  schema_version: 0.1-story
+settings:
+  target_repository: Pwnsat/FlatSat
+  target_commit: b5ac0f2ba5e7bd60fbb6994f681c28053777628e
+  sequence_count: 1
+  sequence_flags: unsegmented
+  secondary_header: false
+  secure_link: firmware_default_enabled
+bindings:
+  - id: mapping.r2.pwnsat.health-check.status
+    intent: project
+    sources:
+      - domain: commands
+        id: obc.request_health_check
+    config:
+      target_command: STATUS
+      target_symbol: SPP_APID_TC_GET_STATUS
+      apid: 12
