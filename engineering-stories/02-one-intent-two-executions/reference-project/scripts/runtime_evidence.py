@@ -359,6 +359,68 @@ def derive_assessment(report: dict[str, Any]) -> str | None:
     return "DIVERGED"
 
 
+def build_runtime_report(
+    definition: dict[str, Any],
+    *,
+    execution_attempt_id: str,
+    runtime_status: str,
+    preconditions: dict[str, Any],
+    presentations: list[dict[str, Any]],
+    execution_occurrences: list[dict[str, Any]],
+    evidence_status: str,
+    observed_execution_count: int | None,
+    diagnostics: list[dict[str, str]],
+) -> dict[str, Any]:
+    if runtime_status not in {"COMPLETE", "ABORTED"}:
+        raise RuntimeEvidenceError("runtime report status must be COMPLETE or ABORTED")
+    a = authorized_invocation_id(definition, execution_attempt_id)
+    if any(item["authorized_invocation_id"] != a for item in presentations):
+        raise RuntimeEvidenceError("presentation is bound to a different authorized invocation")
+    if any(item["authorized_invocation_id"] != a for item in execution_occurrences):
+        raise RuntimeEvidenceError("occurrence is bound to a different authorized invocation")
+    accepted_count = sum(1 for item in execution_occurrences if item["accepted"])
+    if evidence_status == "complete":
+        if observed_execution_count != accepted_count:
+            raise RuntimeEvidenceError(
+                "complete evidence observed count must equal accepted occurrence count"
+            )
+    elif observed_execution_count is not None:
+        raise RuntimeEvidenceError(
+            "non-complete evidence must not assert observed execution count"
+        )
+
+    report = {
+        "kind": "orbitfabric.reference_mission.pwnsat_execution_observation",
+        "format_version": "0.2-story",
+        "producer": {"id": "r2-pwnsat-runtime-proof", "version": "0.2-story"},
+        "experiment_definition_sha256": experiment_identity(definition),
+        "execution_attempt_id": execution_attempt_id,
+        "authorized_instance": {
+            "local_id": definition["authorized_instance"]["local_id"],
+            "authorized_invocation_id": a,
+        },
+        "runtime": {
+            "status": runtime_status,
+            "repository": "Pwnsat/FlatSat",
+            "source_commit": TARGET_COMMIT,
+            "transport": "usb_cdc_serial",
+            "path": "wired_local",
+        },
+        "occurrence_criterion": definition["occurrence_criterion"],
+        "preconditions": preconditions,
+        "presentations": presentations,
+        "execution_occurrences": execution_occurrences,
+        "evidence_status": evidence_status,
+        "expected_execution_count": EXPECTED_EXECUTION_COUNT,
+        "observed_execution_count": observed_execution_count,
+        "assessment": None,
+        "diagnostics": diagnostics,
+    }
+    report["assessment"] = derive_assessment(report)
+    validate_schema(report, OBSERVATION_SCHEMA)
+    return report
+
+
 def build_not_run_report(
     definition: dict[str, Any],
     *,

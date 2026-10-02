@@ -93,3 +93,47 @@ Before any presentation, the caller must establish:
 - exact execution-attempt provenance.
 
 No live presentation is performed by repository CI.
+
+## Full-phase orchestration and bundle verification
+
+The same Story-local implementation also contains an explicit live orchestration layer in `scripts/runtime_phase.py`.
+
+The live entry point is fail-closed:
+
+- it requires an explicit serial port;
+- it requires explicit controlled-runtime and exclusive-command-source assertions;
+- it does not auto-probe by transmitting a command;
+- it refuses to run unless live execution is explicitly requested;
+- repository CI never invokes the live entry point.
+
+The orchestration path is:
+
+```text
+quiesce observation path
+  -> P1 exact frozen stimulus
+  -> retain raw USB stream + raw SPP packets
+  -> evaluate E1
+  -> only if E1 is independently acceptable:
+       quiesce again
+       -> P2 same A / same frozen stimulus
+       -> retain raw USB stream + raw SPP packets
+       -> evaluate E2 or no accepted E2
+  -> deterministic semantic assessment
+  -> runtime trace
+  -> Evidence Set sealing
+  -> offline bundle verification
+```
+
+The bundle verifier uses the existing generic Core Evidence Set Manifest contract from the same accepted Core 1.3.0 lineage already consumed by G1. No new Core semantics are introduced.
+
+Offline tests exercise the full phase using an in-memory serial double, including:
+
+- `P1 -> E1`, `P2 -> E2` -> `DIVERGED`;
+- `P1 -> E1`, `P2 -> no accepted E2` -> `CONFORMANT`;
+- ambiguous P1 STATUS attribution -> `INCONCLUSIVE` and no P2 presentation;
+- failed control preconditions -> `INVALID_RUN` with zero writes;
+- exact Evidence Set integrity;
+- deterministic clean repeat of the synthetic transport run;
+- verifier rejection after retained raw evidence mutation.
+
+These are harness falsification tests only. They are not FlatSat runtime evidence.
