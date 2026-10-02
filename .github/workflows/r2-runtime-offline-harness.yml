@@ -1,0 +1,60 @@
+name: R2 Runtime Offline Harness
+
+on:
+  push:
+    branches:
+      - "r2/bounded-runtime-proof"
+    paths:
+      - "engineering-stories/02-one-intent-two-executions/**"
+      - ".github/workflows/r2-runtime-offline-harness.yml"
+  pull_request:
+    paths:
+      - "engineering-stories/02-one-intent-two-executions/**"
+      - ".github/workflows/r2-runtime-offline-harness.yml"
+  workflow_dispatch:
+
+jobs:
+  runtime-offline-harness:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Reference Mission
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install offline harness dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "cryptography==46.0.7" "jsonschema==4.25.1"
+
+      - name: Run offline preflight and runtime tests
+        run: |
+          ROOT="$PWD"
+          PROJECT="$ROOT/engineering-stories/02-one-intent-two-executions/reference-project"
+          WORK="$RUNNER_TEMP/r2-runtime-offline"
+          mkdir -p "$WORK"
+
+          python "$PROJECT/scripts/runtime_preflight.py"             --output-dir "$WORK"             --execution-attempt-id ci-offline-preflight-not-run
+
+          python -m unittest discover             -s "$PROJECT/runtime-tests"             -p 'test_*.py'             -v
+
+      - name: Confirm no runtime evidence was produced
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = Path(os.environ["RUNNER_TEMP"]) / "r2-runtime-offline" / "execution-observation.not-run.json"
+          value = json.loads(report.read_text(encoding="utf-8"))
+          assert value["runtime"]["status"] == "NOT_RUN"
+          assert value["presentations"] == []
+          assert value["execution_occurrences"] == []
+          assert value["observed_execution_count"] is None
+          assert value["assessment"] is None
+          print("[r2-runtime] CI is offline-only: no presentation or occurrence evidence")
+          PY
