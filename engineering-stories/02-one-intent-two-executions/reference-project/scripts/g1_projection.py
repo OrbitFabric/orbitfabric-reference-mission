@@ -34,7 +34,9 @@ TARGET_COMMIT = "b5ac0f2ba5e7bd60fbb6994f681c28053777628e"
 TARGET_APID = 0x0C
 TARGET_COMMAND = "STATUS"
 TARGET_SYMBOL = "SPP_APID_TC_GET_STATUS"
-SEQUENCE_COUNT = 1
+
+SUPPORTED_SEQUENCE_FLAGS = {"unsegmented": 3}
+SUPPORTED_SECURE_LINK_INTENT = "firmware_default_enabled"
 
 STIMULUS_FILENAME = "pwnsat-health-check.tc.bin"
 MAPPING_FILENAME = "pwnsat-health-check.mapping.json"
@@ -109,10 +111,25 @@ def load_profile() -> tuple[dict[str, Any], bytes]:
         or config.get("apid") != TARGET_APID
     ):
         raise G1Error("Profile target mapping differs from pinned source facts")
-    settings = value.get("settings") or {}
+    settings = value.get("settings")
+    if not isinstance(settings, dict):
+        raise G1Error("Projection Profile settings must be a mapping")
+    required_settings = {
+        "target_repository",
+        "target_commit",
+        "sequence_count",
+        "sequence_flags",
+        "secondary_header",
+        "secure_link",
+    }
+    missing = sorted(required_settings - set(settings))
+    if missing:
+        raise G1Error(
+            "Projection Profile is missing required settings: " + ", ".join(missing)
+        )
     if (
-        settings.get("target_repository") != TARGET_REPOSITORY
-        or settings.get("target_commit") != TARGET_COMMIT
+        settings["target_repository"] != TARGET_REPOSITORY
+        or settings["target_commit"] != TARGET_COMMIT
     ):
         raise G1Error("Profile target baseline differs from pinned source baseline")
     return value, raw
@@ -156,7 +173,6 @@ def validate_target_baseline(value: dict[str, Any]) -> None:
         "packet_type": "TC",
         "secondary_header": False,
         "sequence_flags": 3,
-        "sequence_count": SEQUENCE_COUNT,
     }
     for key, expected_value in expected.items():
         if packet.get(key) != expected_value:
@@ -220,11 +236,78 @@ def resolve_iiss_command(
     return matches[0]
 
 
-def build_stimulus(target_baseline: dict[str, Any]) -> bytes:
+def resolve_profile_projection(
+    profile: dict[str, Any], target_baseline: dict[str, Any]
+) -> dict[str, Any]:
+    settings = profile.get("settings")
+    if not isinstance(settings, dict):
+        raise G1Error("Projection Profile settings must be a mapping")
+
+    sequence_count = settings.get("sequence_count")
+    if (
+        isinstance(sequence_count, bool)
+        or not isinstance(sequence_count, int)
+        or not 0 <= sequence_count <= 0x3FFF
+    ):
+        raise G1Error("Profile sequence_count must be an integer in [0, 16383]")
+
+    sequence_flags_name = settings.get("sequence_flags")
+    if sequence_flags_name not in SUPPORTED_SEQUENCE_FLAGS:
+        raise G1Error(
+            f"unsupported Profile sequence_flags: {sequence_flags_name!r}"
+        )
+    sequence_flags = SUPPORTED_SEQUENCE_FLAGS[sequence_flags_name]
+
+    secondary_header = settings.get("secondary_header")
+    if not isinstance(secondary_header, bool):
+        raise G1Error("Profile secondary_header must be boolean")
+    if secondary_header is not False:
+        raise G1Error(
+            "G1 does not support secondary_header=true for this projection"
+        )
+
+    secure_link_intent = settings.get("secure_link")
+    if secure_link_intent != SUPPORTED_SECURE_LINK_INTENT:
+        raise G1Error(
+            f"unsupported Profile secure_link intent: {secure_link_intent!r}"
+        )
+
+    packet = target_baseline.get("packet_projection") or {}
+    secure = packet.get("secure_link") or {}
+    if packet.get("sequence_flags") != sequence_flags:
+        raise G1Error(
+            "Profile sequence_flags are inconsistent with pinned PWNSAT source facts"
+        )
+    if packet.get("secondary_header") is not secondary_header:
+        raise G1Error(
+            "Profile secondary_header is inconsistent with pinned PWNSAT source facts"
+        )
+    if secure.get("enabled") is not True:
+        raise G1Error(
+            "Profile secure_link intent disagrees with pinned firmware default"
+        )
+
+    return {
+        "sequence_count": sequence_count,
+        "sequence_flags_name": sequence_flags_name,
+        "sequence_flags": sequence_flags,
+        "secondary_header": secondary_header,
+        "secure_link_intent": secure_link_intent,
+        "secure_link_enabled": True,
+        "secure_link_label": "AES-128-ECB/default-enabled",
+    }
+
+
+def build_stimulus(
+    target_baseline: dict[str, Any],
+    projection: dict[str, Any],
+) -> bytes:
     secure = target_baseline["packet_projection"]["secure_link"]
     logical_payload = bytes.fromhex(
         target_baseline["target_command"]["logical_payload_hex"]
     )
+    if projection["secure_link_enabled"] is not True:
+        raise G1Error("resolved secure-link projection is unsupported")
     prefix = len(logical_payload).to_bytes(
         secure["length_prefix_bytes"], "big"
     )
@@ -234,8 +317,16 @@ def build_stimulus(target_baseline: dict[str, Any]) -> bytes:
     key = secure["key_ascii"].encode("ascii")
     encryptor = Cipher(algorithms.AES(key), modes.ECB()).encryptor()
     wire_payload = encryptor.update(plain) + encryptor.finalize()
-    packet_id = (1 << 12) | TARGET_APID
-    sequence = (3 << 14) | SEQUENCE_COUNT
+
+    packet_id = (
+        (1 << 12)
+        | ((1 if projection["secondary_header"] else 0) << 11)
+        | TARGET_APID
+    )
+    sequence = (
+        (projection["sequence_flags"] << 14)
+        | projection["sequence_count"]
+    )
     length_field = len(wire_payload) - 1
     return struct.pack(">HHH", packet_id, sequence, length_field) + wire_payload
 
@@ -247,6 +338,7 @@ def mapping_payload(
     target_baseline: dict[str, Any],
     target_baseline_sha: str,
     stimulus_sha: str,
+    projection: dict[str, Any],
 ) -> dict[str, Any]:
     return {
         "format_version": "0.1-story",
@@ -272,10 +364,10 @@ def mapping_payload(
             "symbol": TARGET_SYMBOL,
             "apid": TARGET_APID,
             "packet_type": "TC",
-            "secondary_header": False,
-            "sequence_flags": 3,
-            "sequence_count": SEQUENCE_COUNT,
-            "secure_link": "AES-128-ECB/default-enabled",
+            "secondary_header": projection["secondary_header"],
+            "sequence_flags": projection["sequence_flags"],
+            "sequence_count": projection["sequence_count"],
+            "secure_link": projection["secure_link_label"],
         },
         "stimulus": {
             "path": STIMULUS_FILENAME,
@@ -490,13 +582,14 @@ def generate(
     if not scenario.get("id") or not source.get("scenario_sha256"):
         raise G1Error("Scenario Declaration lacks exact identity")
 
-    _, profile_raw = load_profile()
+    profile, profile_raw = load_profile()
     profile_sha = sha256_bytes(profile_raw)
     target_baseline = load_json(TARGET_BASELINE_PATH)
     validate_target_baseline(target_baseline)
     target_baseline_sha = sha256_file(TARGET_BASELINE_PATH)
+    projection = resolve_profile_projection(profile, target_baseline)
 
-    stimulus = build_stimulus(target_baseline)
+    stimulus = build_stimulus(target_baseline, projection)
     output_dir.mkdir(parents=True, exist_ok=True)
     stimulus_path = output_dir / STIMULUS_FILENAME
     stimulus_path.write_bytes(stimulus)
@@ -509,6 +602,7 @@ def generate(
         target_baseline,
         target_baseline_sha,
         stimulus_sha,
+        projection,
     )
     mapping_path = output_dir / MAPPING_FILENAME
     write_json(mapping_path, mapping)

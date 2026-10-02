@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import shutil
+import struct
 import sys
 import tempfile
 import unittest
@@ -20,6 +22,13 @@ spec.loader.exec_module(g1)
 
 
 class G1ProjectionUnitTests(unittest.TestCase):
+    def _current_inputs(self):
+        profile, _ = g1.load_profile()
+        baseline = g1.load_json(g1.TARGET_BASELINE_PATH)
+        g1.validate_target_baseline(baseline)
+        projection = g1.resolve_profile_projection(profile, baseline)
+        return profile, baseline, projection
+
     def test_pinned_target_baseline_is_exact(self):
         value = g1.load_json(g1.TARGET_BASELINE_PATH)
         g1.validate_target_baseline(value)
@@ -49,10 +58,25 @@ class G1ProjectionUnitTests(unittest.TestCase):
         )
         self.assertEqual(binding["config"]["apid"], 12)
 
-    def test_stimulus_is_exact_and_deterministic(self):
-        baseline = g1.load_json(g1.TARGET_BASELINE_PATH)
-        first = g1.build_stimulus(baseline)
-        second = g1.build_stimulus(baseline)
+    def test_current_profile_resolves_all_packet_projection_choices(self):
+        profile, baseline, projection = self._current_inputs()
+        self.assertEqual(profile["settings"]["sequence_count"], 1)
+        self.assertEqual(projection["sequence_count"], 1)
+        self.assertEqual(projection["sequence_flags_name"], "unsegmented")
+        self.assertEqual(projection["sequence_flags"], 3)
+        self.assertFalse(projection["secondary_header"])
+        self.assertEqual(
+            projection["secure_link_intent"], "firmware_default_enabled"
+        )
+        self.assertTrue(projection["secure_link_enabled"])
+        self.assertEqual(
+            baseline["packet_projection"]["secure_link"]["enabled"], True
+        )
+
+    def test_stimulus_is_exact_and_deterministic_for_current_profile(self):
+        _, baseline, projection = self._current_inputs()
+        first = g1.build_stimulus(baseline, projection)
+        second = g1.build_stimulus(baseline, projection)
         self.assertEqual(first, second)
         self.assertEqual(
             first.hex(),
@@ -63,19 +87,86 @@ class G1ProjectionUnitTests(unittest.TestCase):
             "db676bb1c080b87cc0bab375f5d2a170a57c4ff2134d41edc31bf37278f8813e",
         )
 
-    def test_retained_stimulus_is_exact_generated_bytes(self):
+    def test_retained_stimulus_is_exact_current_profile_projection(self):
+        _, baseline, projection = self._current_inputs()
         retained = g1.RETAINED_DIR / g1.STIMULUS_FILENAME
         self.assertEqual(
             retained.read_bytes(),
-            g1.build_stimulus(g1.load_json(g1.TARGET_BASELINE_PATH)),
+            g1.build_stimulus(baseline, projection),
+        )
+
+    def test_sequence_count_change_changes_projected_stimulus(self):
+        profile, baseline, current = self._current_inputs()
+        changed = copy.deepcopy(profile)
+        changed["settings"]["sequence_count"] = 2
+        resolved = g1.resolve_profile_projection(changed, baseline)
+        current_bytes = g1.build_stimulus(baseline, current)
+        changed_bytes = g1.build_stimulus(baseline, resolved)
+        self.assertNotEqual(changed_bytes, current_bytes)
+        _, sequence, _ = struct.unpack(">HHH", changed_bytes[:6])
+        self.assertEqual(sequence & 0x3FFF, 2)
+
+    def test_unsupported_sequence_flags_fail_closed(self):
+        profile, baseline, _ = self._current_inputs()
+        changed = copy.deepcopy(profile)
+        changed["settings"]["sequence_flags"] = "continuation"
+        with self.assertRaisesRegex(g1.G1Error, "sequence_flags"):
+            g1.resolve_profile_projection(changed, baseline)
+
+    def test_unsupported_secondary_header_choice_fails_closed(self):
+        profile, baseline, _ = self._current_inputs()
+        changed = copy.deepcopy(profile)
+        changed["settings"]["secondary_header"] = True
+        with self.assertRaisesRegex(g1.G1Error, "secondary_header"):
+            g1.resolve_profile_projection(changed, baseline)
+
+    def test_secure_link_intent_cannot_disagree_with_pinned_default(self):
+        profile, baseline, _ = self._current_inputs()
+        changed = copy.deepcopy(profile)
+        changed["settings"]["secure_link"] = "disabled"
+        with self.assertRaisesRegex(g1.G1Error, "secure_link"):
+            g1.resolve_profile_projection(changed, baseline)
+
+    def test_missing_packet_projection_setting_fails_closed(self):
+        profile, baseline, _ = self._current_inputs()
+        changed = copy.deepcopy(profile)
+        changed["settings"].pop("sequence_count")
+        original = g1.PROFILE_PATH
+        with tempfile.TemporaryDirectory() as tmp:
+            candidate = Path(tmp) / "profile.yaml"
+            import yaml
+            candidate.write_text(
+                yaml.safe_dump(changed, sort_keys=False),
+                encoding="utf-8",
+            )
+            g1.PROFILE_PATH = candidate
+            try:
+                with self.assertRaisesRegex(g1.G1Error, "missing required settings"):
+                    g1.load_profile()
+            finally:
+                g1.PROFILE_PATH = original
+
+    def test_mapping_uses_same_resolved_profile_packet_choices(self):
+        _, baseline, projection = self._current_inputs()
+        retained = g1.load_json(g1.RETAINED_DIR / g1.MAPPING_FILENAME)
+        target = retained["target"]
+        self.assertEqual(target["sequence_count"], projection["sequence_count"])
+        self.assertEqual(target["sequence_flags"], projection["sequence_flags"])
+        self.assertEqual(
+            target["secondary_header"], projection["secondary_header"]
+        )
+        self.assertEqual(
+            target["secure_link"], projection["secure_link_label"]
         )
 
     def test_stimulus_is_raw_spp_not_usb_framed(self):
-        raw = g1.build_stimulus(g1.load_json(g1.TARGET_BASELINE_PATH))
+        _, baseline, projection = self._current_inputs()
+        raw = g1.build_stimulus(baseline, projection)
         self.assertFalse(raw.startswith(b"\xaa\x55"))
-        packet_id, sequence, length = __import__("struct").unpack(">HHH", raw[:6])
+        packet_id, sequence, length = struct.unpack(">HHH", raw[:6])
         self.assertEqual(packet_id & 0x07FF, 0x0C)
         self.assertEqual((packet_id >> 12) & 1, 1)
+        self.assertEqual((packet_id >> 11) & 1, 0)
         self.assertEqual((sequence >> 14) & 0x03, 3)
         self.assertEqual(sequence & 0x3FFF, 1)
         self.assertEqual(length, 15)
