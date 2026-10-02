@@ -13,4 +13,4 @@ orbitfabric export scenario-declaration   "$PROJECT/scenario/r2_g0_health_check.
 
 python "$PROJECT/scripts/g1_projection.py"   --iiss-dir "$WORK/iiss"   --scenario-declaration "$WORK/scenario_declaration.json"   --output-dir "$WORK/out"   --verify-retained
 
-python -m unittest discover   -s "$PROJECT/tests"   -p 'test_g1_projection.py'   -v
+python -m unittest discover   -s "$PROJECT/g1-tests"   -p 'test_g1_projection.py'   -v
