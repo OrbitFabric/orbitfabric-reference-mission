@@ -131,6 +131,67 @@ The runner:
 
 No network, external runtime, Studio, hardware, USB, or RF access is required after the pinned Core is installed.
 
-## G1-G4
+## G1 projection lineage
 
-G1, G2, G3, and G4 are not implemented or authorized by this package.
+G0 remains **ACCEPTED / CLOSED** and its retained `0.1-story` synthetic contracts, fixtures, authorized invocation `A`, and assessment vocabulary are unchanged.
+
+G1 is implemented here only as an **offline projection-lineage candidate**:
+
+```text
+Core Integration Input Set
+    -> exact commands/obc.request_health_check
+    -> exact Core-emitted Scenario atom
+    -> Story-local Projection Profile
+    -> pinned Pwnsat/FlatSat source baseline
+    -> explicit Story-local target mapping
+    -> deterministic frozen target stimulus artifact
+    -> Integration Result 0.2-candidate
+    -> Scenario Projection Accounting 0.1-candidate
+```
+
+The pinned target source baseline is:
+
+```text
+Pwnsat/FlatSat
+b5ac0f2ba5e7bd60fbb6994f681c28053777628e
+```
+
+Exact reviewed source-file identities are retained in:
+
+```text
+target/pwnsat-source-baseline.json
+```
+
+The source-grounded target operation is FlatSat `STATUS` / `SPP_APID_TC_GET_STATUS`, APID `0x0C`, whose firmware dispatch calls `telemetrySPPTransmitMissionStatus()`.
+
+G1 artifacts are retained under:
+
+```text
+artifacts/g1/pwnsat-health-check.mapping.json
+artifacts/g1/pwnsat-health-check.tc.bin
+artifacts/g1/integration_result.json
+artifacts/g1/scenario_projection_accounting.json
+```
+
+The binary stimulus is a projection artifact only. Its presence means **PROJECTED**, not transmitted, executed, or observed.
+
+The G1 workflow uses Core commit:
+
+```text
+b4e1185de4931ff125be699dfe09f63ab3746015
+orbitfabric 1.3.0
+```
+
+This is the direct child of the G0 Core pin that publishes the accepted generic Scenario Projection Accounting contract. The existing G0 workflow remains on its original pin.
+
+Run G1 with that Core baseline and Python `cryptography==46.0.7` installed:
+
+```bash
+./engineering-stories/02-one-intent-two-executions/reference-project/run_g1.sh
+```
+
+The runner exports the IISS and Scenario Declaration, regenerates all G1 artifacts, validates the existing Integration Result / Scenario Projection Accounting contracts, compares retained bytes, performs a second clean regeneration, and runs the offline test suite.
+
+No PWNSAT runtime, FlatSat hardware, USB, serial, RF, PWNSAT-C3 execution, command transmission, STATUS capture, replay, runtime occurrence evidence, or runtime Observation Report production is part of G1.
+
+G2, G3, and G4 remain **NOT AUTHORIZED**.

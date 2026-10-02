@@ -1,0 +1,52 @@
+name: R2 G1 Offline PWNSAT Projection Lineage Proof
+
+on:
+  push:
+    branches:
+      - "r2/g1-projection-lineage-proof"
+    paths:
+      - "engineering-stories/02-one-intent-two-executions/**"
+      - ".github/workflows/r2-g1-offline-projection-proof.yml"
+  pull_request:
+    paths:
+      - "engineering-stories/02-one-intent-two-executions/**"
+      - ".github/workflows/r2-g1-offline-projection-proof.yml"
+  workflow_dispatch:
+
+env:
+  ORBITFABRIC_CORE_REPOSITORY: OrbitFabric/orbitfabric
+  ORBITFABRIC_G1_CORE_REF: b4e1185de4931ff125be699dfe09f63ab3746015
+
+jobs:
+  g1-offline-projection:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Reference Mission
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install exact G1 Core contract baseline and projection dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "git+https://github.com/${ORBITFABRIC_CORE_REPOSITORY}.git@${ORBITFABRIC_G1_CORE_REF}"
+          python -m pip install "cryptography==46.0.7"
+          orbitfabric --version
+
+      - name: Run R2 G1 offline projection proof
+        run: |
+          ROOT="$PWD"
+          PROJECT="$ROOT/engineering-stories/02-one-intent-two-executions/reference-project"
+          WORK="$RUNNER_TEMP/r2-g1"
+          mkdir -p "$WORK/iiss" "$WORK/out"
+
+          orbitfabric export integration-input-set mission/ --output-dir "$WORK/iiss"
+          orbitfabric export scenario-declaration             "$PROJECT/scenario/r2_g0_health_check.yaml"             --json "$WORK/scenario_declaration.json"
+
+          python "$PROJECT/scripts/g1_projection.py"             --iiss-dir "$WORK/iiss"             --scenario-declaration "$WORK/scenario_declaration.json"             --output-dir "$WORK/out"             --verify-retained
+
+          python -m unittest discover             -s "$PROJECT/g1-tests"             -p 'test_g1_projection.py'             -v

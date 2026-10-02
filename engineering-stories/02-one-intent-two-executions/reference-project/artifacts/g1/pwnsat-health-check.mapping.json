@@ -1,0 +1,43 @@
+{
+  "boundary": "PROJECTED != TRANSMITTED != EXECUTED != OBSERVED",
+  "format_version": "0.1-story",
+  "kind": "orbitfabric.reference_mission.pwnsat_projection_mapping",
+  "mapping_id": "mapping.r2.pwnsat.health-check.status",
+  "profile": {
+    "id": "r2-pwnsat-flatsat-health-check",
+    "sha256": "16730c278a8f97332994c65eba35c8d0ffdbb2d94da007e0f32712dc7bb28531"
+  },
+  "projection_state": "PROJECTED",
+  "runtime_claim": false,
+  "source": {
+    "command": {
+      "domain": "commands",
+      "id": "obc.request_health_check"
+    },
+    "scenario": {
+      "atom_id": "atom-0003",
+      "id": "r2_g0_health_check",
+      "sha256": "62a6e33afca19a29fa7357cd9c773481b77536bc7b6470575f6f4b8c7aedca27"
+    }
+  },
+  "stimulus": {
+    "media_type": "application/octet-stream",
+    "path": "pwnsat-health-check.tc.bin",
+    "sha256": "db676bb1c080b87cc0bab375f5d2a170a57c4ff2134d41edc31bf37278f8813e"
+  },
+  "target": {
+    "apid": 12,
+    "command": "STATUS",
+    "packet_type": "TC",
+    "secondary_header": false,
+    "secure_link": "AES-128-ECB/default-enabled",
+    "sequence_count": 1,
+    "sequence_flags": 3,
+    "symbol": "SPP_APID_TC_GET_STATUS"
+  },
+  "target_baseline": {
+    "commit_sha": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
+    "repository": "Pwnsat/FlatSat",
+    "source_baseline_sha256": "b6e5a6d04a37d1fb29dd2c00f1c81d22cfae65626564160b2fa11dd80cc4ca5e"
+  }
+}

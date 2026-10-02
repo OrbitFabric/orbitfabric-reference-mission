@@ -1,0 +1,89 @@
+{
+  "format_version": "0.1-story",
+  "kind": "orbitfabric.reference_mission.pwnsat_source_baseline",
+  "repository": "Pwnsat/FlatSat",
+  "commit_sha": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
+  "source_files": [
+    {
+      "path": "Firmware/mission.h",
+      "blob_sha": "13dd456f26f83ac3b186065c3f7d12e60234afa0",
+      "establishes": [
+        "SPP_APID_TC_GET_STATUS = 0x0C",
+        "SPP_APID_TM_STATUS = 0x0C"
+      ]
+    },
+    {
+      "path": "Firmware/worker.cpp",
+      "blob_sha": "1c3b7e9db506732f77c3214a38b297c0d8625323",
+      "establishes": [
+        "SPP_APID_TC_GET_STATUS is named STATUS",
+        "GET_STATUS dispatches directly to telemetrySPPTransmitMissionStatus()"
+      ]
+    },
+    {
+      "path": "Firmware/spp.h",
+      "blob_sha": "ebd15fc88edcd9c77d2d421eeb890a700c291dc9",
+      "establishes": [
+        "CCSDS SPP primary header is 6 bytes",
+        "TC packet type is 1",
+        "unsegmented sequence flag is 3",
+        "sequence count occupies the low 14 bits of the packet sequence field"
+      ]
+    },
+    {
+      "path": "Firmware/spp.cpp",
+      "blob_sha": "a5ec274e7f3b2fd72da432ff4211d30c809e6131",
+      "establishes": [
+        "primary-header packet id and sequence fields are packed big-endian",
+        "packet length field is data length plus secondary-header length minus one",
+        "the TC packet counter is initialized to zero",
+        "the TC packet counter is incremented before packet construction",
+        "the TC packet counter wraps through the firmware counter-validation logic"
+      ]
+    },
+    {
+      "path": "Firmware/secure_link.cpp",
+      "blob_sha": "a02de14460d41961f0acaf40178bfd68fae686be",
+      "establishes": [
+        "secure link is enabled by default",
+        "AES-128 ECB key is PWNsatLabKey1234",
+        "plaintext is prefixed by a two-byte big-endian payload length and zero-padded to an AES block"
+      ]
+    }
+  ],
+  "target_command": {
+    "name": "STATUS",
+    "symbol": "SPP_APID_TC_GET_STATUS",
+    "apid": 12,
+    "logical_payload_hex": "",
+    "response_builder": "telemetrySPPTransmitMissionStatus"
+  },
+  "packet_projection": {
+    "ccsds_version": 0,
+    "packet_type": "TC",
+    "secondary_header": false,
+    "sequence_flags": 3,
+    "sequence_counter": {
+      "field_bits": 14,
+      "initial_value": 0,
+      "increment": "before_packet_construction",
+      "stateful": true,
+      "fixed_source_constant": false
+    },
+    "secure_link": {
+      "enabled": true,
+      "algorithm": "AES-128-ECB",
+      "key_ascii": "PWNsatLabKey1234",
+      "length_prefix_bytes": 2,
+      "padding": "zero-to-16-byte-block"
+    }
+  },
+  "semantic_correspondence": {
+    "orbitfabric_operation": "obc.request_health_check",
+    "pwnsat_operation": "STATUS / SPP_APID_TC_GET_STATUS",
+    "justification": "The OrbitFabric operation is a parameterless request for a basic spacecraft health check. The pinned FlatSat source defines parameterless GET_STATUS/STATUS and dispatches it directly to telemetrySPPTransmitMissionStatus().",
+    "limit": "The FlatSat source does not call this operation a health check and does not establish equivalence with OrbitFabric acknowledgement, emitted-event, timeout, or expected-effect semantics. G1 claims only the bounded Story-local command projection.",
+    "ambiguity": "No ambiguity remains about the target command representation at the pinned source baseline; broader semantic/runtime equivalence is explicitly not claimed."
+  },
+  "projection_scope": "Raw CCSDS SPP telecommand bytes only; no USB, serial, RF, PWNSAT-C3 framing, transport, transmission, execution, or observation."
+}
