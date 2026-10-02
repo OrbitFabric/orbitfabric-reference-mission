@@ -137,6 +137,18 @@ def validate_target_baseline(value: dict[str, Any]) -> None:
         "response_builder": "telemetrySPPTransmitMissionStatus",
     }:
         raise G1Error("target command facts differ from reviewed PWNSAT source")
+    correspondence = value.get("semantic_correspondence") or {}
+    if (
+        correspondence.get("orbitfabric_operation") != COMMAND_ID
+        or correspondence.get("pwnsat_operation")
+        != "STATUS / SPP_APID_TC_GET_STATUS"
+        or not correspondence.get("justification")
+        or not correspondence.get("limit")
+        or not correspondence.get("ambiguity")
+    ):
+        raise G1Error("target semantic correspondence is missing or incomplete")
+    if not value.get("projection_scope"):
+        raise G1Error("target projection scope is not explicit")
     packet = value.get("packet_projection") or {}
     secure = packet.get("secure_link") or {}
     expected = {

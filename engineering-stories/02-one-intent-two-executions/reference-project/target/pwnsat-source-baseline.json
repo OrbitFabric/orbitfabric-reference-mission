@@ -67,5 +67,13 @@
       "length_prefix_bytes": 2,
       "padding": "zero-to-16-byte-block"
     }
-  }
+  },
+  "semantic_correspondence": {
+    "orbitfabric_operation": "obc.request_health_check",
+    "pwnsat_operation": "STATUS / SPP_APID_TC_GET_STATUS",
+    "justification": "The OrbitFabric operation is a parameterless request for a basic spacecraft health check. The pinned FlatSat source defines parameterless GET_STATUS/STATUS and dispatches it directly to telemetrySPPTransmitMissionStatus().",
+    "limit": "The FlatSat source does not call this operation a health check and does not establish equivalence with OrbitFabric acknowledgement, emitted-event, timeout, or expected-effect semantics. G1 claims only the bounded Story-local command projection.",
+    "ambiguity": "No ambiguity remains about the target command representation at the pinned source baseline; broader semantic/runtime equivalence is explicitly not claimed."
+  },
+  "projection_scope": "Raw CCSDS SPP telecommand bytes only; no USB, serial, RF, PWNSAT-C3 framing, transport, transmission, execution, or observation."
 }
