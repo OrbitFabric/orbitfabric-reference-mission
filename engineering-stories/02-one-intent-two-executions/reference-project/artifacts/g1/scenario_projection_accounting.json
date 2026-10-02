@@ -1,0 +1,31 @@
+{
+  "accounting_version": "0.1-candidate",
+  "completeness": "complete",
+  "kind": "orbitfabric.scenario_projection_accounting",
+  "records": [
+    {
+      "atom_id": "atom-0001",
+      "disposition": "not_projected",
+      "mapping_ids": [],
+      "reason": "G1 projects only the selected command atom; scenario_metadata remains outside the target command projection."
+    },
+    {
+      "atom_id": "atom-0002",
+      "disposition": "not_projected",
+      "mapping_ids": [],
+      "reason": "G1 projects only the selected command atom; initial_mode remains outside the target command projection."
+    },
+    {
+      "atom_id": "atom-0003",
+      "disposition": "projected",
+      "mapping_ids": [
+        "mapping.r2.pwnsat.health-check.status"
+      ],
+      "reason": null
+    }
+  ],
+  "scenario": {
+    "id": "r2_g0_health_check",
+    "sha256": "62a6e33afca19a29fa7357cd9c773481b77536bc7b6470575f6f4b8c7aedca27"
+  }
+}

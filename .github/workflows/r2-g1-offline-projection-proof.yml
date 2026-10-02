@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install "git+https://github.com/${ORBITFABRIC_CORE_REPOSITORY}.git@${ORBITFABRIC_G1_CORE_REF}"
-          python -m pip install "cryptography>=44,<47"
+          python -m pip install "cryptography==46.0.7"
           orbitfabric --version
 
       - name: Run R2 G1 offline projection proof
@@ -47,6 +47,6 @@ jobs:
           orbitfabric export integration-input-set mission/ --output-dir "$WORK/iiss"
           orbitfabric export scenario-declaration             "$PROJECT/scenario/r2_g0_health_check.yaml"             --json "$WORK/scenario_declaration.json"
 
-          python "$PROJECT/scripts/g1_projection.py"             --iiss-dir "$WORK/iiss"             --scenario-declaration "$WORK/scenario_declaration.json"             --output-dir "$WORK/out"             --print-artifacts-base64
+          python "$PROJECT/scripts/g1_projection.py"             --iiss-dir "$WORK/iiss"             --scenario-declaration "$WORK/scenario_declaration.json"             --output-dir "$WORK/out"             --verify-retained
 
           python -m unittest discover             -s "$PROJECT/tests"             -p 'test_g1_projection.py'             -v

@@ -1,0 +1,155 @@
+{
+  "adapter": {
+    "id": "r2-pwnsat-story-integration-package",
+    "version": "0.1.0"
+  },
+  "artifacts": [
+    {
+      "derived_from_mappings": [
+        "mapping.r2.pwnsat.health-check.status"
+      ],
+      "id": "pwnsat-health-check-mapping",
+      "kind": "orbitfabric.reference_mission.pwnsat_projection_mapping",
+      "media_type": "application/json",
+      "path": "pwnsat-health-check.mapping.json",
+      "reason": null,
+      "requirement": "required",
+      "retained_partial": false,
+      "sha256": "d044f1dd2d096d6d0ddf696c90a9e39cc2848f0681046c48a54c8fc4bc4f492e",
+      "status": "generated"
+    },
+    {
+      "derived_from_mappings": [
+        "mapping.r2.pwnsat.health-check.status"
+      ],
+      "id": "pwnsat-health-check-stimulus",
+      "kind": "orbitfabric.reference_mission.pwnsat_target_stimulus",
+      "media_type": "application/octet-stream",
+      "path": "pwnsat-health-check.tc.bin",
+      "reason": null,
+      "requirement": "required",
+      "retained_partial": false,
+      "sha256": "db676bb1c080b87cc0bab375f5d2a170a57c4ff2134d41edc31bf37278f8813e",
+      "status": "generated"
+    },
+    {
+      "derived_from_mappings": [
+        "mapping.r2.pwnsat.health-check.status"
+      ],
+      "id": "scenario-accounting",
+      "kind": "orbitfabric.scenario_projection_accounting",
+      "media_type": "application/json",
+      "path": "scenario_projection_accounting.json",
+      "reason": null,
+      "requirement": "required",
+      "retained_partial": false,
+      "sha256": "4289c96b0cfadf4443e851cd3b30cc5900dc22d845c752ace80649de4bdcb2f2",
+      "status": "generated"
+    }
+  ],
+  "capabilities": [
+    "profile_validation",
+    "projection",
+    "artifact_generation",
+    "traceability"
+  ],
+  "coverage": {
+    "reason": null,
+    "records": [],
+    "scope": {
+      "domains": [
+        "commands"
+      ],
+      "scenario": "r2_g0_health_check"
+    },
+    "status": "complete",
+    "summary": {
+      "projected_scenario_atoms": 1,
+      "target_mappings": 1
+    }
+  },
+  "diagnostics": [],
+  "evidence": [
+    {
+      "commit_sha": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
+      "kind": "source_provenance",
+      "repository": "Pwnsat/FlatSat",
+      "source_baseline_sha256": "b02b1166c90ad1ea8ecd9cd9736856c4a1bc40c22c44c6f23e326c2a60e1b3a9"
+    }
+  ],
+  "external_tools": [],
+  "inputs": {
+    "core_input_set": {
+      "kind": "orbitfabric.integration_input_set",
+      "reason": null,
+      "sha256": "4bbdca769e4b8fdee51719a47acaa49e9a552b4360f96d8664947514b074ef34",
+      "status": "available",
+      "version": "0.1-candidate"
+    },
+    "operation_inputs": [
+      {
+        "id": "r2_g0_health_check",
+        "reason": null,
+        "role": "scenario",
+        "sha256": "62a6e33afca19a29fa7357cd9c773481b77536bc7b6470575f6f4b8c7aedca27",
+        "status": "available"
+      }
+    ],
+    "profile": {
+      "id": "r2-pwnsat-flatsat-health-check",
+      "kind": "orbitfabric.projection_profile",
+      "profile_version": "0.1-candidate",
+      "reason": null,
+      "sha256": "16730c278a8f97332994c65eba35c8d0ffdbb2d94da007e0f32712dc7bb28531",
+      "status": "available",
+      "version": "0.1.0"
+    }
+  },
+  "integration": {
+    "id": "orbitfabric-r2-pwnsat-story",
+    "schema_version": "0.1-story"
+  },
+  "kind": "orbitfabric.integration_result",
+  "mappings": [
+    {
+      "id": "mapping.r2.pwnsat.health-check.status",
+      "mapping_artifact_sha256": "d044f1dd2d096d6d0ddf696c90a9e39cc2848f0681046c48a54c8fc4bc4f492e",
+      "profile_bindings": [
+        "mapping.r2.pwnsat.health-check.status"
+      ],
+      "sources": [
+        {
+          "domain": "commands",
+          "id": "obc.request_health_check"
+        }
+      ],
+      "stimulus_artifact_sha256": "db676bb1c080b87cc0bab375f5d2a170a57c4ff2134d41edc31bf37278f8813e",
+      "targets": [
+        {
+          "id": "SPP_APID_TC_GET_STATUS/0x0C",
+          "kind": "command",
+          "namespace": "pwnsat.flatsat"
+        }
+      ]
+    }
+  ],
+  "mission": {
+    "id": "of-rm-1",
+    "model_version": "0.1.0-reference-skeleton",
+    "reason": null,
+    "status": "available"
+  },
+  "operation": {
+    "id": "project"
+  },
+  "resolutions": [
+    {
+      "commit_sha": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
+      "id": "pwnsat-source-baseline",
+      "repository": "Pwnsat/FlatSat",
+      "source_baseline_sha256": "b02b1166c90ad1ea8ecd9cd9736856c4a1bc40c22c44c6f23e326c2a60e1b3a9"
+    }
+  ],
+  "result": "succeeded",
+  "result_version": "0.2-candidate"
+}

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import importlib.util
+import shutil
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -25,6 +27,16 @@ class G1ProjectionUnitTests(unittest.TestCase):
         self.assertEqual(
             value["commit_sha"],
             "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
+        )
+        self.assertEqual(
+            {(item["path"], item["blob_sha"]) for item in value["source_files"]},
+            {
+                ("Firmware/mission.h", "13dd456f26f83ac3b186065c3f7d12e60234afa0"),
+                ("Firmware/worker.cpp", "1c3b7e9db506732f77c3214a38b297c0d8625323"),
+                ("Firmware/spp.h", "ebd15fc88edcd9c77d2d421eeb890a700c291dc9"),
+                ("Firmware/spp.cpp", "a5ec274e7f3b2fd72da432ff4211d30c809e6131"),
+                ("Firmware/secure_link.cpp", "a02de14460d41961f0acaf40178bfd68fae686be"),
+            },
         )
 
     def test_profile_binds_exact_canonical_command(self):
@@ -51,14 +63,17 @@ class G1ProjectionUnitTests(unittest.TestCase):
             "db676bb1c080b87cc0bab375f5d2a170a57c4ff2134d41edc31bf37278f8813e",
         )
 
+    def test_retained_stimulus_is_exact_generated_bytes(self):
+        retained = g1.RETAINED_DIR / g1.STIMULUS_FILENAME
+        self.assertEqual(
+            retained.read_bytes(),
+            g1.build_stimulus(g1.load_json(g1.TARGET_BASELINE_PATH)),
+        )
+
     def test_stimulus_is_raw_spp_not_usb_framed(self):
-        raw = g1.build_stimulus(
-            g1.load_json(g1.TARGET_BASELINE_PATH)
-        )
+        raw = g1.build_stimulus(g1.load_json(g1.TARGET_BASELINE_PATH))
         self.assertFalse(raw.startswith(b"\xaa\x55"))
-        packet_id, sequence, length = __import__("struct").unpack(
-            ">HHH", raw[:6]
-        )
+        packet_id, sequence, length = __import__("struct").unpack(">HHH", raw[:6])
         self.assertEqual(packet_id & 0x07FF, 0x0C)
         self.assertEqual((packet_id >> 12) & 1, 1)
         self.assertEqual((sequence >> 14) & 0x03, 3)
@@ -77,17 +92,17 @@ class G1ProjectionUnitTests(unittest.TestCase):
         }
         value = g1.accounting_payload(declaration, "atom-0003")
         by_id = {r["atom_id"]: r for r in value["records"]}
+        self.assertEqual(by_id["atom-0003"]["disposition"], "projected")
+        self.assertEqual(by_id["atom-0003"]["mapping_ids"], [g1.MAPPING_ID])
+        self.assertEqual(by_id["atom-0001"]["disposition"], "not_projected")
+        self.assertEqual(by_id["atom-0002"]["disposition"], "not_projected")
+
+    def test_retained_mapping_makes_no_runtime_claim(self):
+        mapping = g1.load_json(g1.RETAINED_DIR / g1.MAPPING_FILENAME)
+        self.assertFalse(mapping["runtime_claim"])
         self.assertEqual(
-            by_id["atom-0003"]["disposition"], "projected"
-        )
-        self.assertEqual(
-            by_id["atom-0003"]["mapping_ids"], [g1.MAPPING_ID]
-        )
-        self.assertEqual(
-            by_id["atom-0001"]["disposition"], "not_projected"
-        )
-        self.assertEqual(
-            by_id["atom-0002"]["disposition"], "not_projected"
+            mapping["boundary"],
+            "PROJECTED != TRANSMITTED != EXECUTED != OBSERVED",
         )
 
     def test_wrong_target_baseline_fails_closed(self):
@@ -99,12 +114,10 @@ class G1ProjectionUnitTests(unittest.TestCase):
     def test_wrong_profile_command_fails_closed(self):
         original = g1.PROFILE_PATH
         raw = original.read_text(encoding="utf-8")
-        with __import__("tempfile").TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
             candidate = Path(tmp) / "profile.yaml"
             candidate.write_text(
-                raw.replace(
-                    "obc.request_health_check", "obc.other"
-                ),
+                raw.replace("obc.request_health_check", "obc.other"),
                 encoding="utf-8",
             )
             g1.PROFILE_PATH = candidate
@@ -113,6 +126,24 @@ class G1ProjectionUnitTests(unittest.TestCase):
                     g1.load_profile()
             finally:
                 g1.PROFILE_PATH = original
+
+    def test_retained_byte_change_fails_closed(self):
+        with tempfile.TemporaryDirectory() as left_dir, tempfile.TemporaryDirectory() as right_dir:
+            left = Path(left_dir)
+            right = Path(right_dir)
+            for name in [
+                g1.STIMULUS_FILENAME,
+                g1.MAPPING_FILENAME,
+                g1.ACCOUNTING_FILENAME,
+                g1.RESULT_FILENAME,
+            ]:
+                shutil.copyfile(g1.RETAINED_DIR / name, left / name)
+                shutil.copyfile(g1.RETAINED_DIR / name, right / name)
+            (right / g1.STIMULUS_FILENAME).write_bytes(
+                (right / g1.STIMULUS_FILENAME).read_bytes() + b"\x00"
+            )
+            with self.assertRaises(g1.G1Error):
+                g1.compare_dirs(left, right)
 
 
 if __name__ == "__main__":

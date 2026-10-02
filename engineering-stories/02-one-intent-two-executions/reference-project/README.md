@@ -1,10 +1,10 @@
-# R2 G0 Offline Contract / Identity Proof
+# R2 G0/G1 Reference Project
 
-This Reference Project is the executable G0 slice for R2, **One Intent, Two Executions**.
+This Reference Project is the executable workspace for R2, **One Intent, Two Executions**.
 
-Everything in G0 is offline. All runtime/projection identities retained in the fixtures are explicitly synthetic placeholders. **No PWNSAT runtime has been exercised and no cybersecurity claim is made.**
+G0 remains the accepted and closed offline contract / identity proof. G1 adds a separate **projection-lineage** proof. Neither gate executes PWNSAT or establishes runtime truth.
 
-## Boundary
+## Preserved G0 boundary
 
 The canonical Reference Mission and canonical top-level `scenarios/` set are unchanged.
 
@@ -14,123 +14,148 @@ The Story-local Scenario is:
 scenario/r2_g0_health_check.yaml
 ```
 
-It references the unchanged mission via `../../../../mission` and declares exactly one command action:
+It references the unchanged mission and declares exactly one command action:
 
 ```text
 obc.request_health_check
 ```
 
-The pinned OrbitFabric Core exports its Scenario Declaration. G0 resolves the command atom by inspecting the Core-emitted atom `kind` and role-labelled `commands/obc.request_health_check` reference. It does **not** infer the atom id from YAML/list position.
-
-The retained synthetic Experiment Definition is regenerated from that Core declaration during validation and compared byte-for-byte with the checked-in fixture.
-
-## Story-owned contracts
+G0 resolves the command atom from the Core-emitted Scenario Declaration rather than YAML/list position. Its Story-owned contracts remain unchanged:
 
 ```text
 schemas/pwnsat-experiment-definition-0.1-story.schema.json
 schemas/pwnsat-execution-observation-0.1-story.schema.json
 ```
 
-Both formats are closed, versioned Story contracts:
+The retained G0 Experiment Definition and Observation Report fixtures remain explicitly synthetic `0.1-story` artifacts. Their projection identities are still synthetic placeholders and are **not reinterpreted** as G1 projection evidence.
+
+G0's authorized invocation `A`, assessment rules, and `CONFORMANT / DIVERGED / INCONCLUSIVE / INVALID_RUN` vocabulary are not changed by G1.
+
+## G1 projection-lineage boundary
+
+G1 proves only this offline chain:
 
 ```text
-orbitfabric.reference_mission.pwnsat_experiment_definition
-orbitfabric.reference_mission.pwnsat_execution_observation
-format_version = 0.1-story
+Core Integration Input Set
+    -> exact commands/obc.request_health_check
+    -> Core-emitted Scenario atom
+    -> Story-local Projection Profile
+    -> pinned Pwnsat/FlatSat source baseline
+    -> explicit Story-local mapping
+    -> deterministic frozen target stimulus
+    -> Integration Result 0.2-candidate
+    -> Scenario Projection Accounting 0.1-candidate
 ```
 
-They are not Core, Mission Model, Studio, or generic OrbitFabric contracts.
+The Story-local Integration Package owns projection only.
 
-## Exact Experiment Definition identity
-
-The Experiment Definition identity is:
+The retained G1 mapping explicitly preserves:
 
 ```text
-SHA-256(exact retained UTF-8 file bytes)
+PROJECTED != TRANSMITTED != EXECUTED != OBSERVED
 ```
 
-There is no self-digest field.
+No device is opened. No command is transmitted. No FlatSat, USB, serial, RF, PWNSAT-C3, replay, STATUS capture, runtime occurrence identification, or runtime Observation Report production occurs in G1.
 
-## Authorized invocation A
+## Pinned PWNSAT target baseline
 
-`A` is Story-owned, run-scoped, and distinct from the Scenario atom.
-
-The exact preimage is:
+The target representation is grounded in:
 
 ```text
-UTF-8(
-    "orbitfabric-r2-authorized-invocation-v1" + LF +
-    experiment_definition_sha256 + LF +
-    execution_attempt_id + LF +
-    authorized_instance.local_id + LF
-)
+Pwnsat/FlatSat
+b5ac0f2ba5e7bd60fbb6994f681c28053777628e
 ```
 
-Then:
+The exact reviewed source-file identities are retained in:
 
 ```text
-A = "r2a:" + lowercase_hex(SHA-256(preimage))
+target/pwnsat-source-baseline.json
 ```
 
-The schemas constrain variable identifiers so LF cannot appear in them, making the encoding unambiguous.
+The source establishes that the target command corresponding to the bounded health-check request is FlatSat `STATUS` / `SPP_APID_TC_GET_STATUS`, APID `0x0C`, and that the firmware dispatches that telecommand to `telemetrySPPTransmitMissionStatus()`.
 
-`A` is not a global Core `OperationInstance`.
+The source baseline also fixes the SPP primary-header rules and default secure-link representation used to materialize the G1 stimulus.
 
-## Deterministic assessment
+## Projection Profile
 
-The Story-owned assessment order is:
+The authored target-specific intent is:
 
 ```text
-invalid required run precondition
-    -> INVALID_RUN
-
-otherwise insufficient/ambiguous occurrence evidence
-    -> INCONCLUSIVE
-
-otherwise observed_execution_count == expected_execution_count
-    -> CONFORMANT
-
-otherwise
-    -> DIVERGED
+profile/pwnsat-flat-sat-health-check.yaml
 ```
 
-`observed_execution_count` is accepted only when occurrence evidence is `complete`, and it must equal the number of explicit nested execution-occurrence records with `accepted: true`.
+It uses the existing generic Projection Profile envelope. PWNSAT-specific fields remain inside integration-owned `settings` / binding `config`; they do not become Core semantics.
 
-`PASS` / `FAIL` are test or acceptance-gate states only; they are not R2 semantic outcomes.
-
-## Synthetic fixtures
+## Retained G1 artifacts
 
 ```text
-fixtures/experiment-definition.synthetic.json
-fixtures/observations/conformant.synthetic.json
-fixtures/observations/diverged.synthetic.json
-fixtures/observations/inconclusive.synthetic.json
-fixtures/observations/invalid-run.synthetic.json
+artifacts/g1/pwnsat-health-check.mapping.json
+artifacts/g1/pwnsat-health-check.tc.bin
+artifacts/g1/integration_result.json
+artifacts/g1/scenario_projection_accounting.json
 ```
 
-The projection fields in the Experiment Definition are deterministic synthetic placeholders because G1 has not produced real Integration Result, Scenario Projection Accounting, mapping, or stimulus artifacts.
+`pwnsat-health-check.tc.bin` is an exact deterministic **projection artifact**. Its presence is not evidence that the packet was ever transmitted or executed.
 
-The synthetic occurrence criterion is deliberately Story-local and does not encode FlatSat STATUS parsing, telemetry sequencing, or any other real runtime rule.
+The Integration Result records exact IISS, Profile, Scenario, mapping, target-baseline, generated-artifact and accounting identities.
 
-## Run locally
+Scenario Projection Accounting is generated from the actual Core-emitted Scenario Declaration. Every atom receives an explicit disposition and only the semantically resolved command atom is associated with the PWNSAT mapping.
 
-Use the same OrbitFabric Core baseline pinned by the repository CI, then run from repository root:
+## Core baseline split
+
+The accepted G0 workflow remains pinned to:
+
+```text
+760f364875515c4f4ac0675b5545a2ee0ebc22ad
+orbitfabric 1.3.0
+```
+
+G1 uses the direct child:
+
+```text
+b4e1185de4931ff125be699dfe09f63ab3746015
+orbitfabric 1.3.0
+```
+
+That Core commit publishes the already accepted generic Scenario Projection Accounting contract required by G1. It introduces no Mission or Scenario semantic change. G0 files and semantics are not repinned or rewritten.
+
+## Run G0 locally
+
+With the G0 Core baseline installed:
 
 ```bash
 ./engineering-stories/02-one-intent-two-executions/reference-project/run_g0.sh
 ```
 
-The runner:
+## Run G1 locally
 
-1. asks Core to export the Story-local Scenario Declaration;
-2. resolves `obc.request_health_check` from declaration content;
-3. regenerates the synthetic Experiment Definition and checks byte identity;
-4. validates all schemas and cross-references;
-5. recomputes all four semantic outcomes;
-6. runs the offline unit suite.
+With the G1 Core baseline and Python `cryptography==46.0.7` installed:
 
-No network, external runtime, Studio, hardware, USB, or RF access is required after the pinned Core is installed.
+```bash
+./engineering-stories/02-one-intent-two-executions/reference-project/run_g1.sh
+```
 
-## G1-G4
+The G1 runner:
 
-G1, G2, G3, and G4 are not implemented or authorized by this package.
+1. exports the exact Core Integration Input Set;
+2. exports the Story-local Scenario Declaration;
+3. resolves the canonical command from the IISS;
+4. resolves the exact command atom from declaration semantics;
+5. validates the pinned PWNSAT source baseline and Profile;
+6. deterministically regenerates mapping, stimulus, Integration Result and Scenario Projection Accounting;
+7. validates the Result/accounting bundle through the Core conformance checker;
+8. compares regenerated outputs byte-for-byte with retained artifacts;
+9. performs a second clean regeneration and verifies identical identities;
+10. runs the G1 offline unit suite.
+
+## Current boundary
+
+```text
+G0    ACCEPTED / CLOSED
+G1    IMPLEMENTATION CANDIDATE / OFFLINE PROJECTION ONLY
+G2    NOT AUTHORIZED
+G3    NOT AUTHORIZED
+G4    NOT AUTHORIZED
+```
+
+G1 does not authorize runtime execution or public R2 publication.
