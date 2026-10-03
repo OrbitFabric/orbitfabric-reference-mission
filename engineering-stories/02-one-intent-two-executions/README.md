@@ -1,31 +1,28 @@
-# R2 G0 - One Intent, Two Executions
+# R2 - One Intent, Two Executions
 
-This directory is the **implementation/reference-project workspace** for Engineering Story R2 G0.
+This directory contains the current engineering package for R2, **One Intent, Two Executions**.
 
-It is **not** the final public Engineering Story narrative.
+R2 asks whether one mission operation, expected to execute once, can preserve a trustworthy semantic lineage from OrbitFabric intent through projection into an external runtime and then compare:
 
-G0 proves only that the accepted R2 Story-owned contract and identity model can be expressed and assessed deterministically **offline**, without adding any new OrbitFabric Core semantic.
+```text
+expected_execution_count = 1
+observed_execution_count = ?
+```
 
-## G0 boundary
+Current state:
 
-Implemented here:
+- G0 identity and deterministic assessment are completed offline;
+- G1 PWNSAT projection lineage is completed offline;
+- the bounded PWNSAT/FlatSat runtime harness is implemented and offline-verified;
+- physical FlatSat execution is **NOT RUN**;
+- no physical P1/P2 presentations or E1/E2 runtime occurrence evidence exist yet.
 
-- one Story-local Scenario for `obc.request_health_check`;
-- Story-owned Experiment Definition schema;
-- Story-owned Execution Observation Report schema;
-- deterministic run-scoped authorized invocation identity `A`;
-- structural and semantic validation;
-- synthetic `CONFORMANT`, `DIVERGED`, `INCONCLUSIVE`, and `INVALID_RUN` fixtures;
-- offline tests.
+This directory is an engineering/reference package. It is **not yet the final published Engineering Story narrative**.
 
-Not implemented here:
+For an external PWNSAT-oriented review, start here:
 
-- PWNSAT or FlatSat execution;
-- USB, serial, RF, C3, replay, or hardware access;
-- PWNSAT Integration Package or Projection Profile;
-- real projection lineage or target stimulus;
-- Core, Mission Model, Evidence Set, or Studio changes;
-- G1-G4;
-- a public R2 claim.
+- [PWNSAT Maintainer Review](PWNSAT-MAINTAINER-REVIEW.md)
 
-See [`reference-project/`](reference-project/) for the executable G0 proof.
+For the executable package, contracts, projection artifacts, runtime harness and detailed technical documentation:
+
+- [Reference Project](reference-project/)
