@@ -17,7 +17,7 @@ The experiment preserves the identity of that intent through projection into an 
 observed_execution_count = ?
 ```
 
-The goal is not to prove a generic replay vulnerability or a general security property of PWNSAT. The goal is to determine whether the observed runtime occurrences can be attributed and counted against one frozen mission intent.
+The goal is not to characterize PWNSAT behavior in general. The goal is to determine whether distinct runtime occurrences can be attributed and counted against one frozen mission intent.
 
 ## Why PWNSAT / FlatSat
 
