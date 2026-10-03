@@ -71,6 +71,15 @@ def build_status_tm(sequence_count: int, uptime: int) -> bytes:
 
 
 class RuntimeTransportTests(unittest.TestCase):
+    def test_live_pyserial_dependency_initializes_without_hardware(self):
+        link = rt.initialize_live_serial_dependency()
+        try:
+            self.assertFalse(link.is_open)
+            self.assertIsNone(link.port)
+            self.assertEqual(link.baudrate, rt.SERIAL_BAUD)
+        finally:
+            link.close()
+
     def test_frozen_g1_stimulus_identity_is_unchanged(self):
         raw = (
             ROOT / "artifacts" / "g1" / "pwnsat-health-check.tc.bin"

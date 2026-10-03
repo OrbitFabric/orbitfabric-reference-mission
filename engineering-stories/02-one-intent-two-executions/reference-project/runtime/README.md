@@ -94,6 +94,16 @@ Before any presentation, the caller must establish:
 
 No live presentation is performed by repository CI.
 
+The live boundary has one additional Python dependency:
+
+```text
+pyserial==3.5
+```
+
+CI installs that exact version and initializes an unopened `serial.Serial(port=None)`
+object to verify the live software dependency without opening, probing, or
+enumerating any hardware port.
+
 ## Full-phase orchestration and bundle verification
 
 The same Story-local implementation also contains an explicit live orchestration layer in `scripts/runtime_phase.py`.

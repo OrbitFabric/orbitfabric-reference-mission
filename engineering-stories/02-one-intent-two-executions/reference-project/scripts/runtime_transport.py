@@ -6,6 +6,8 @@ import time
 from dataclasses import dataclass
 from typing import Protocol
 
+import serial
+
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 USB_INGRESS_SYNC = b"\xAA\x55"
@@ -297,12 +299,25 @@ def present_frozen_stimulus(
     return framed, capture
 
 
+def initialize_live_serial_dependency(timeout_seconds: float = 0.05):
+    """Initialize pyserial without opening or probing any hardware."""
+    link = serial.Serial(
+        port=None,
+        baudrate=SERIAL_BAUD,
+        timeout=timeout_seconds,
+    )
+    if link.is_open:
+        link.close()
+        raise RuntimeTransportError(
+            "pyserial dependency check unexpectedly opened a serial port"
+        )
+    return link
+
+
 def open_serial_link(port: str, timeout_seconds: float = 0.05):
     """Open the authorized wired CDC link only when explicitly invoked live."""
     if not port:
         raise RuntimeTransportError("explicit serial port is required")
-    import serial
-
     return serial.Serial(
         port=port,
         baudrate=SERIAL_BAUD,
