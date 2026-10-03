@@ -1,0 +1,41 @@
+{
+  "format_version": "0.1-story",
+  "id": "r2.pwnsat.status-occurrence",
+  "kind": "orbitfabric.reference_mission.pwnsat_occurrence_criterion",
+  "version": "0.1-story",
+  "scope": "execution_attempt",
+  "frozen_stimulus_sha256": "db676bb1c080b87cc0bab375f5d2a170a57c4ff2134d41edc31bf37278f8813e",
+  "expected_execution_count": 1,
+  "requirements": {
+    "exact_frozen_stimulus_presentation": true,
+    "target_tm_apid": 12,
+    "target_tm_packet_type": "TM",
+    "bounded_observation_window": true,
+    "exclusive_command_source_control": true,
+    "observation_channel_cleared_before_presentation": true,
+    "exact_attempt_binding": true,
+    "native_tm_sequence_identity": true,
+    "status_uptime_runtime_fact": true
+  },
+  "acceptance": {
+    "status_alone_is_sufficient": false,
+    "one_unambiguous_status_candidate_required_per_accepted_occurrence": true,
+    "first_occurrence": {
+      "requires_unique_tm_status_in_window": true,
+      "requires_valid_status_payload": true
+    },
+    "later_occurrence": {
+      "requires_unique_tm_status_in_window": true,
+      "requires_valid_status_payload": true,
+      "requires_distinct_tm_sequence_count_from_previous_accepted_occurrence": true,
+      "requires_non_decreasing_status_uptime": true,
+      "requires_distinct_raw_evidence_identity": true
+    },
+    "ambiguous_attribution_result": "INCONCLUSIVE"
+  },
+  "nonclaims": [
+    "no generic causality semantics",
+    "no generic replay-vulnerability claim",
+    "no generic PWNSAT insecurity claim"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "format_version": "0.1-story",
+  "kind": "orbitfabric.reference_mission.pwnsat_runtime_transport_source_baseline",
+  "repository": "Pwnsat/FlatSat",
+  "commit_sha": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e",
+  "source_files": [
+    {
+      "path": "Attacks/lib/flatsat_usb.py",
+      "blob_sha": "b66d37c15e3571cee65fcc19dd26f96c62b5be41",
+      "establishes": [
+        "wired runtime uses USB CDC serial at 921600 baud",
+        "telecommand ingress applies USB transport framing around raw SPP",
+        "telemetry receive processing re-synchronizes a byte stream into raw SPP packets"
+      ]
+    },
+    {
+      "path": "Attacks/lib/pwnsat_packets.py",
+      "blob_sha": "a7ca2e88fb434dd19a810ee713c6141c088111af",
+      "establishes": [
+        "raw SPP command representation is distinct from USB transport framing",
+        "STATUS is a named command supported by the repository packet toolkit"
+      ]
+    },
+    {
+      "path": "Firmware/usbCDC.cpp",
+      "blob_sha": "53ecec8fa8b4157b49b529d68fd7368d6b5183b5",
+      "establishes": [
+        "ingress frame starts with 0xAA 0x55 followed by a two-byte big-endian raw-SPP length",
+        "ingress callback receives only the raw SPP bytes",
+        "telemetry egress writes one 0xAA sync byte followed directly by raw SPP bytes"
+      ]
+    },
+    {
+      "path": "Firmware/usbCDC.h",
+      "blob_sha": "0bab8457bfb740ff9f56da2d922468dcf0355246",
+      "establishes": [
+        "USB telemetry egress sync byte is 0xAA"
+      ]
+    },
+    {
+      "path": "Firmware/worker.cpp",
+      "blob_sha": "1c3b7e9db506732f77c3214a38b297c0d8625323",
+      "establishes": [
+        "GET_STATUS dispatches directly to telemetrySPPTransmitMissionStatus",
+        "TM_STATUS carries target uptime seconds in its logical payload",
+        "telemetry dispatch sends the raw SPP packet through the USB observation path"
+      ]
+    },
+    {
+      "path": "Firmware/spp.cpp",
+      "blob_sha": "a5ec274e7f3b2fd72da432ff4211d30c809e6131",
+      "establishes": [
+        "SPP packet length is recoverable from the primary-header length field",
+        "TM sequence count is carried in the low 14 bits and is target-stateful"
+      ]
+    },
+    {
+      "path": "Firmware/spp.h",
+      "blob_sha": "ebd15fc88edcd9c77d2d421eeb890a700c291dc9",
+      "establishes": [
+        "SPP primary header length is six bytes"
+      ]
+    },
+    {
+      "path": "Firmware/mission.h",
+      "blob_sha": "13dd456f26f83ac3b186065c3f7d12e60234afa0",
+      "establishes": [
+        "SPP_APID_TC_GET_STATUS is 0x0C",
+        "SPP_APID_TM_STATUS is 0x0C"
+      ]
+    },
+    {
+      "path": "Firmware/secure_link.cpp",
+      "blob_sha": "a02de14460d41961f0acaf40178bfd68fae686be",
+      "establishes": [
+        "secure link is enabled by default",
+        "default payload protection uses the pinned AES-128-ECB key and length-prefixed plaintext"
+      ]
+    }
+  ],
+  "transport": {
+    "kind": "usb_cdc_serial",
+    "baud": 921600,
+    "wired_local_only": true,
+    "rf": false,
+    "ingress": {
+      "representation": "0xAA 0x55 | uint16_be(raw_spp_len) | raw_spp"
+    },
+    "egress": {
+      "representation": "0xAA | raw_spp",
+      "packet_boundary": "recover raw SPP size from the CCSDS primary-header length field"
+    }
+  },
+  "status": {
+    "tc_apid": 12,
+    "tm_apid": 12,
+    "tm_packet_type": "TM",
+    "secondary_header": false,
+    "uptime_offset_bytes_in_logical_payload": 12,
+    "uptime_width_bytes": 4,
+    "uptime_endianness": "little",
+    "minimum_logical_payload_bytes": 26
+  }
+}

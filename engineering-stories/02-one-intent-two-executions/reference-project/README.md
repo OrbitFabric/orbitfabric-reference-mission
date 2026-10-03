@@ -194,4 +194,18 @@ The runner exports the IISS and Scenario Declaration, regenerates all G1 artifac
 
 No PWNSAT runtime, FlatSat hardware, USB, serial, RF, PWNSAT-C3 execution, command transmission, STATUS capture, replay, runtime occurrence evidence, or runtime Observation Report production is part of G1.
 
-G2, G3, and G4 remain **NOT AUTHORIZED**.
+## G2-G4 bounded runtime proof phase
+
+Architecture Lab Decision 029 authorizes G2, G3 and G4 as one continuous bounded runtime proof phase. G0 and G1 remain accepted / closed.
+
+The runtime harness is documented under:
+
+```text
+runtime/README.md
+```
+
+The first implementation milestone is offline-only: transport framing/parsing, STATUS validation, frozen occurrence criterion, additive `0.2-story` runtime contracts, evidence retention primitives and preflight tests.
+
+Repository CI does not open hardware and produces only an explicit `NOT_RUN` observation report with no presentation or occurrence evidence.
+
+Public R2 publication remains **NOT AUTHORIZED**.
