@@ -38,3 +38,22 @@ The demonstrated vertical slice uses OrbitFabric, F Prime, and OpenC3 COSMOS aro
 - [Inspect the accepted R1 Reference Project baseline](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/d66f6068235d425bdc2335d4b0cb09a58e70c1de/engineering-stories/01-one-contract-flight-ground/reference-project)
 
 The executable project remains repository-side under `engineering-stories/01-one-contract-flight-ground/reference-project/`; the published Story and Deep Dive remain under `docs/`.
+
+## R2 — One Intent, Two Executions
+
+R2 is the current Engineering Story in progress.
+
+It asks whether one mission operation, expected to execute once, can preserve a trustworthy semantic lineage through projection into an external runtime and then reconcile expected execution multiplicity with runtime-observed multiplicity.
+
+Current status:
+
+- G0 offline identity and deterministic assessment: accepted;
+- G1 PWNSAT / FlatSat projection lineage: accepted;
+- bounded runtime-proof phase: active in Draft PR #13;
+- physical FlatSat execution: **NOT RUN**;
+- final public Story / Technical Deep Dive: not yet published.
+
+- [Inspect the accepted R2 repository-side package](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions)
+- [Follow the active R2 Draft PR #13](https://github.com/OrbitFabric/orbitfabric-reference-mission/pull/13)
+
+The runtime candidate remains separate from the accepted `main` baseline until the physical proof is completed and accepted.
