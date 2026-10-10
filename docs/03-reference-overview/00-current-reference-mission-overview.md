@@ -38,7 +38,7 @@ The current mission model includes:
 
 ## Current operational scenarios
 
-The current scenario set contains four executable scenario classes:
+The current canonical scenario set contains five executable scenarios:
 
 | Scenario | Operational role |
 |---|---|
@@ -46,6 +46,9 @@ The current scenario set contains four executable scenario classes:
 | `eclipse_low_power_payload_suspension` | EPS low-power warning, degraded-power transition and autonomous payload stop. |
 | `adcs_degraded_pointing_payload_inhibit` | ADCS degraded pointing, ADCS-degraded transition and autonomous payload stop. |
 | `delayed_sband_downlink_backlog_pending` | Science product remains pending while S-band downlink is not executed. |
+| `payload_stop_acquisition_verification` | Stop-acquisition command/telemetry verification slice consumed by Engineering Story R1. |
+
+The first four scenarios form the main tutorial walkthrough set. The fifth is canonical mission evidence used by R1. R2 deliberately keeps its health-check Scenario Story-local under `engineering-stories/`, so the R2 experiment does not modify the canonical top-level Scenario set.
 
 ## Core-owned generated surfaces
 
@@ -151,13 +154,14 @@ The existence of related Core evidence surfaces does not imply those Studio capa
 
 ## Reference Mission ecosystem role
 
-The repository now serves four complementary purposes:
+The repository now serves five complementary purposes:
 
 ```text
 progressive Mission Data Contract tutorial
 + executable scenario evidence set
 + Core integration/reference mission
 + Studio engineering acceptance and visual-understanding example
++ Engineering Story source and reproducible pressure-test environment
 ```
 
 That combination is deliberate.

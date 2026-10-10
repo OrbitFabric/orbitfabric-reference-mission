@@ -24,6 +24,7 @@ It is not flight software, not a spacecraft simulator, not a real mission config
 - [Engineering Stories](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/)
 - [R1 Story: One Mission Contract Across Flight and Ground](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r1-flight-ground/)
 - [R1 Technical Deep Dive](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r1-flight-ground/technical-deep-dive/)
+- [R2 Story: One Intent, Two Executions](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r2-pwnsat/)
 
 ## Two pillars
 
@@ -39,8 +40,8 @@ OrbitFabric Reference Mission
 │
 └── Engineering Stories
     ├── Front Story
-    ├── Technical Deep Dive
-    └── Reproducible Reference Project
+    ├── Reproducible Reference Project
+    └── Technical Deep Dive when the Story needs one
 ```
 
 ### Reference Mission
@@ -59,7 +60,7 @@ Engineering Stories complement the tutorial rather than replace it.
 
 Each Story starts from a real engineering question, selects a bounded slice of the canonical Reference Mission and exercises that slice against a concrete toolchain, runtime or integration boundary.
 
-A complete Story is published in three layers:
+Every Engineering Story has a reader-facing Story and an inspectable proof surface. A separate Technical Deep Dive is added only when the mechanics and evidence need their own document:
 
 ```text
 Front Story
@@ -67,16 +68,17 @@ Front Story
     What problem did we explore?
     What did we learn?
 
-Technical Deep Dive
-    How exactly does it work?
-    Where are the ownership boundaries?
-    What evidence supports the claims?
-
 Reference Project
     Can I inspect it?
     Can I run it?
     Can I reproduce the result?
+
+Optional Technical Deep Dive
+    How exactly does it work when the Front Story
+    should not carry all of the mechanics?
 ```
+
+R1 uses all three layers. R2 intentionally uses the Front Story plus the Reference Project; its exact schemas, artifacts, harness and evidence machinery live with the executable package rather than in a separate Deep Dive.
 
 ## R1 - One Mission Contract Across Flight and Ground
 
@@ -131,6 +133,26 @@ Final Story / Deep Dive package
 ```
 
 R1 is intentionally bounded. It does not claim generic F Prime project generation, full canonical Scenario execution by COSMOS, flight behavior generation from mission expected effects, generic adapter composition or write-once-run-everywhere behavior. The exact claims, non-claims, ownership boundaries and retained evidence are documented in the [Technical Deep Dive](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r1-flight-ground/technical-deep-dive/).
+
+## R2 - One Intent, Two Executions
+
+R2 asks a different question: can one unchanged mission intent remain accountable when it is projected into an independently owned runtime and the expected execution multiplicity is kept separate from what runtime evidence can actually support?
+
+The published baseline uses the existing canonical operation `obc.request_health_check`, a Story-local Scenario and PWNSAT/FlatSat as the external target boundary. The projection lineage and complete runtime harness are verified offline.
+
+The evidence boundary is explicit:
+
+```text
+G0 / G1                     accepted / closed
+runtime harness             verified offline
+physical FlatSat execution  NOT RUN
+live semantic assessment    NONE
+```
+
+- [Read R2: One Intent, Two Executions](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r2-pwnsat/)
+- [Inspect the R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project)
+
+R2 is published as an intentionally bounded offline Engineering Story. Physical FlatSat evidence, if later obtained, extends the Story rather than being implied by the current publication.
 
 ## Repository layout
 

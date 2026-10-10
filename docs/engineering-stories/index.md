@@ -4,7 +4,7 @@ OrbitFabric Engineering Stories are reproducible technical investigations built 
 
 They complement the Reference Mission tutorial rather than replace it. The Reference Mission provides a shared canonical mission model; each Engineering Story selects a meaningful slice of that model and exercises it against a concrete engineering problem, toolchain, runtime, or integration boundary.
 
-A complete Engineering Story is intentionally layered:
+Every Engineering Story has two required layers:
 
 ```text
 Front Story
@@ -12,18 +12,15 @@ Front Story
     What problem did we explore?
     What did we learn?
 
-Technical Deep Dive
-    How exactly does it work?
-    Where are the ownership boundaries?
-    What evidence supports the claims?
-
 Reference Project
     Can I inspect it?
     Can I run it?
     Can I reproduce the result?
 ```
 
-The three layers form one package. The Story establishes the engineering thesis, the Deep Dive makes the mechanics and evidence explicit, and the Reference Project provides the executable proof surface.
+A **Technical Deep Dive is optional**. It is added when the mechanics, ownership boundaries and retained evidence need a separate technical document rather than more weight in the narrative.
+
+R1 uses Story + Technical Deep Dive + Reference Project. R2 intentionally uses Story + Reference Project: its exact schemas, source baselines, projection artifacts, runtime harness and evidence machinery already live in the executable package.
 
 Most Stories use the canonical OrbitFabric Reference Mission as their upstream mission context. This keeps the examples connected to one coherent mission model instead of turning the repository into a collection of unrelated demos.
 
@@ -52,7 +49,7 @@ Current status:
 - bounded runtime harness: **implemented and verified offline (33/33 runtime tests at the published candidate)**;
 - physical FlatSat execution: **NOT RUN**, so no physical P1/P2 or accepted E1/E2 and no observed FlatSat multiplicity;
 - final runtime phase acceptance: **pending physical evidence and a separate review**;
-- Technical Deep Dive: **not yet published**.
+- publication model: **Front Story + Reference Project**; no separate Technical Deep Dive is required for the current R2 baseline.
 
 - [Read the R2 Front Story](r2-pwnsat/index.md)
 - [Inspect the R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project)

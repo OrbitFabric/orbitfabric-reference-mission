@@ -45,6 +45,7 @@ Use this order when reading or extending the documentation:
 1. `docs/00-orientation/`, repository purpose and reading path.
 2. `docs/02-tutorial/`, progressive tutorial path from mission need through Core evidence and Studio exploration.
 3. `docs/03-reference-overview/`, compact view of the current validated model and ecosystem role.
+4. `docs/engineering-stories/`, reproducible investigations that take bounded mission slices into real downstream tools and external runtime boundaries.
 
 The repository previously explored a broader documentation taxonomy with separate engineering-foundation, scenario-design and Studio-driver areas. The public structure was later deliberately simplified. Those concerns now live inside the tutorial and reference overview instead of placeholder sections.
 
@@ -59,6 +60,7 @@ The documentation must keep a strict conceptual separation between:
 | Generated evidence steps | Explain Core-owned outputs and their compatibility boundaries. |
 | Studio exploration steps | Show how Studio consumes Core-owned facts to help a human understand the mission. |
 | Reference overview | Describe the current validated end-state without pretending to be the construction sequence. |
+| Engineering Stories | Pressure-test bounded slices of the validated mission against concrete downstream systems without redefining the canonical mission semantics. |
 
 ## Core and Studio boundary
 

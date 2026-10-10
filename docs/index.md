@@ -41,6 +41,12 @@ This site shows how a representative small-spacecraft mission can move from oper
 
     [Studio exploration →](02-tutorial/23-opening-the-reference-mission-in-studio.md)
 
+-   **Pressure-test the contract through Engineering Stories**
+
+    Follow reproducible investigations that take bounded slices of the canonical mission into independently owned flight, ground and external-runtime systems.
+
+    [Engineering Stories →](engineering-stories/index.md)
+
 </div>
 
 ## The engineering arc
@@ -67,10 +73,11 @@ The Reference Mission is intentionally **contract-level**. It is not flight soft
 | Area | Current reference coverage |
 |---|---|
 | Mission contract | Spacecraft identity, subsystem topology, operational modes, telemetry, commands, events, faults, payloads, data products, contact/downlink intent and commandability/autonomy. |
-| Executable evidence | Four deterministic scenarios covering nominal acquisition, low-power protection, ADCS-degraded protection and delayed downlink backlog. |
+| Executable evidence | Five deterministic canonical scenarios: four tutorial scenarios plus the R1 stop-acquisition verification scenario. |
 | Core inspection surfaces | Model Summary, Mission Snapshot, Entity Index, Relationship Manifest, dashboard/scenario-index/coverage surfaces and explicit FDIR relationship families. |
 | Generated integration artifacts | Runtime-facing C++17 contract bindings plus ground-facing dictionaries and review artifacts. |
 | Studio Preview 1 | Mission Atlas, Entity Explorer, Entity X-Ray, Relations/Context Map, Validation Findings, Operational State Map and Mode Focus. |
+| Engineering Stories | R1 proves a live flight/ground convergence slice; R2 publishes a source-grounded PWNSAT projection and offline runtime-accountability harness with physical FlatSat execution explicitly NOT RUN. |
 
 ## Current scenario set
 
@@ -80,6 +87,7 @@ The Reference Mission is intentionally **contract-level**. It is not flight soft
 | `eclipse_low_power_payload_suspension` | EPS low-power warning, degraded-power posture and autonomous payload stop. |
 | `adcs_degraded_pointing_payload_inhibit` | ADCS degraded pointing, ADCS-degraded posture and autonomous payload stop. |
 | `delayed_sband_downlink_backlog_pending` | Histogram generated, S-band idle and backlog explicitly pending. |
+| `payload_stop_acquisition_verification` | Canonical stop-acquisition command/telemetry verification slice consumed by Engineering Story R1. |
 
 ## Release posture represented here
 
