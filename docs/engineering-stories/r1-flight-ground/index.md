@@ -1,5 +1,8 @@
 ---
 title: One Mission Contract Across Flight and Ground
+story_social_title: One Mission Contract Across Flight and Ground
+story_social_description: One canonical mission-level semantic root across native F Prime and OpenC3 COSMOS paths, verified in a live flight-ground loop.
+story_social_image: assets/engineering-stories/r1-flight-ground/r1-cover.jpg
 ---
 
 # One Mission Contract Across Flight and Ground
