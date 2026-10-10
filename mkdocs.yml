@@ -108,7 +108,7 @@ nav:
   - Engineering Stories:
       - Overview: engineering-stories/index.md
       - R1 — One Mission Contract Across Flight and Ground:
-          - Story: engineering-stories/r1-flight-ground/index.md
+          - One Mission Contract Across Flight and Ground: engineering-stories/r1-flight-ground/index.md
           - Technical Deep Dive: engineering-stories/r1-flight-ground/technical-deep-dive.md
       - R2 — One Intent, Two Executions:
-          - Front Story: engineering-stories/r2-pwnsat/index.md
+          - One Intent, Two Executions: engineering-stories/r2-pwnsat/index.md
