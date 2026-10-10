@@ -38,3 +38,24 @@ The demonstrated vertical slice uses OrbitFabric, F Prime, and OpenC3 COSMOS aro
 - [Inspect the accepted R1 Reference Project baseline](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/d66f6068235d425bdc2335d4b0cb09a58e70c1de/engineering-stories/01-one-contract-flight-ground/reference-project)
 
 The executable project remains repository-side under `engineering-stories/01-one-contract-flight-ground/reference-project/`; the published Story and Deep Dive remain under `docs/`.
+
+## R2 — One Intent, Two Executions
+
+The second Engineering Story explores whether one unchanged mission intent can be projected into an independently owned FlatSat runtime, while distinguishing authorized invocation, controlled presentation, target-produced observations, and evidence-supported execution occurrences.
+
+The published Front Story presents the engineering reasoning and the reproducible offline work; it **does not claim physical FlatSat execution**.
+
+Current status:
+
+- G0 offline contract and identity proof: **accepted / closed**;
+- G1 offline PWNSAT projection lineage: **accepted / closed**;
+- bounded runtime harness: **implemented and verified offline (33/33 runtime tests at the published candidate)**;
+- physical FlatSat execution: **NOT RUN**, so no physical P1/P2 or accepted E1/E2 and no observed FlatSat multiplicity;
+- final runtime phase acceptance: **pending physical evidence and a separate review**;
+- Technical Deep Dive: **not yet published**.
+
+- [Read the R2 Front Story](r2-pwnsat/index.md)
+- [Inspect the R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project)
+- [Read the PWNSAT Maintainer Review](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/02-one-intent-two-executions/PWNSAT-MAINTAINER-REVIEW.md)
+
+The Story explains why the current evidence is deliberately bounded. New external hardware evidence or maintainer corrections can be added later without rewriting the historical offline conclusions.

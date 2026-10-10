@@ -17,7 +17,7 @@ Current state:
 - physical FlatSat execution is **NOT RUN**;
 - no physical P1/P2 presentations or E1/E2 runtime occurrence evidence exist yet.
 
-This directory is an engineering/reference package. It is **not yet the final published Engineering Story narrative**.
+This directory is the engineering/reference package. The [published R2 Front Story](../../docs/engineering-stories/r2-pwnsat/index.md) explains the current offline proof and explicitly identifies physical FlatSat execution as **NOT RUN**. Final runtime acceptance remains pending.
 
 For an external PWNSAT-oriented review, start here:
 
