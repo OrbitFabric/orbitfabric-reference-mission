@@ -1,7 +1,9 @@
 ---
 title: One Intent, Two Executions
 description: A source-grounded OrbitFabric Engineering Story about PWNSAT FlatSat, execution multiplicity and evidence accountability. Physical FlatSat execution has not yet been run.
-r2_social_image: engineering-stories/r2-pwnsat/images/r2-cover.jpg
+story_social_title: One Intent, Two Executions
+story_social_description: One mission intent, an external FlatSat runtime, and honest execution evidence. Offline-verified; physical execution NOT RUN.
+story_social_image: engineering-stories/r2-pwnsat/images/r2-cover.jpg
 ---
 
 # One Intent, Two Executions
