@@ -4,6 +4,8 @@ description: A source-grounded OrbitFabric Engineering Story about PWNSAT FlatSa
 r2_social_image: engineering-stories/r2-pwnsat/images/r2-cover.jpg
 ---
 
+# One Intent, Two Executions
+
 ![R2 Engineering Story. One mission intent leads to one authorized invocation and a frozen representation; two controlled presentations target FlatSat, while expected execution count one is compared with evidence-supported observed multiplicity.](images/r2-cover.jpg)
 
 *R1 worked. R2 began when I stopped asking how to demonstrate the architecture and started asking how to make it prove something I did not already control.*
