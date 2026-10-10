@@ -890,7 +890,7 @@ with no presentations, no execution occurrences, no observed execution count and
 
 That is exactly the correct CI result.
 
-The exact machinery lives in the [R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/7913af6e1c65858c9535136c319add51311d2e03/engineering-stories/02-one-intent-two-executions/reference-project): schemas, Profile, Story-local Scenario, source baselines, binary artifacts, scripts, tests, hashes and eventually retained physical evidence. The Story only needs enough of that machinery to explain why the result can be trusted.
+The exact machinery lives in the [R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/76ed6471f7726a006d7f5a72bde1e1110026f2fd/engineering-stories/02-one-intent-two-executions/reference-project): schemas, Profile, Story-local Scenario, source baselines, binary artifacts, scripts, tests, hashes and eventually retained physical evidence. The Story only needs enough of that machinery to explain why the result can be trusted.
 
 ---
 

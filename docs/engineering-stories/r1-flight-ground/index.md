@@ -1,5 +1,7 @@
 # One Mission Contract Across Flight and Ground
 
+![R1 Engineering Story. One canonical OrbitFabric mission meaning branches into native F Prime flight and OpenC3 COSMOS ground paths, then converges in a verified live stop-acquisition loop.](../../assets/engineering-stories/r1-flight-ground/r1-cover.png)
+
 *A mission has concepts that should mean one thing, even when those concepts must live inside systems that have good reasons to be different.*
 
 That problem appears long before we choose a flight software framework, a ground system, or a dictionary format.

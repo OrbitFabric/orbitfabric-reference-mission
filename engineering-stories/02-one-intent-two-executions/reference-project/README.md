@@ -1,8 +1,26 @@
-# R2 G0 Offline Contract / Identity Proof
+# R2 Reference Project - One Intent, Two Executions
 
-This Reference Project is the executable G0 slice for R2, **One Intent, Two Executions**.
+This is the executable proof package behind R2, **One Intent, Two Executions**.
 
-Everything in G0 is offline. All runtime/projection identities retained in the fixtures are explicitly synthetic placeholders. **No PWNSAT runtime has been exercised and no cybersecurity claim is made.**
+The published package spans three deliberately separated layers:
+
+```text
+G0
+    Story-local contract / identity / deterministic assessment proof
+
+G1
+    accepted offline PWNSAT projection lineage
+
+bounded runtime harness
+    implemented and verified offline
+    physical FlatSat execution = NOT RUN
+```
+
+The package preserves each phase as historical evidence rather than rewriting earlier fixtures after later phases become available. **No physical PWNSAT/FlatSat runtime has been exercised and no cybersecurity claim is made.**
+
+## G0 foundation
+
+Everything retained under the original G0 fixtures remains offline and synthetic by design.
 
 ## Boundary
 
@@ -108,9 +126,9 @@ fixtures/observations/inconclusive.synthetic.json
 fixtures/observations/invalid-run.synthetic.json
 ```
 
-The projection fields in the Experiment Definition are deterministic synthetic placeholders because G1 has not produced real Integration Result, Scenario Projection Accounting, mapping, or stimulus artifacts.
+The projection fields in the retained G0 Experiment Definition remain deterministic synthetic placeholders **by design**. They are historical G0 evidence and are not rewritten after G1. The real accepted G1 mapping, Integration Result, Scenario Projection Accounting and frozen stimulus are retained separately under `artifacts/g1/`.
 
-The synthetic occurrence criterion is deliberately Story-local and does not encode FlatSat STATUS parsing, telemetry sequencing, or any other real runtime rule.
+The synthetic G0 occurrence criterion is deliberately Story-local and does not encode FlatSat STATUS parsing, telemetry sequencing, or any other real runtime rule.
 
 ## Run locally
 
@@ -135,7 +153,7 @@ No network, external runtime, Studio, hardware, USB, or RF access is required af
 
 G0 remains **ACCEPTED / CLOSED** and its retained `0.1-story` synthetic contracts, fixtures, authorized invocation `A`, and assessment vocabulary are unchanged.
 
-G1 is implemented here only as an **offline projection-lineage candidate**:
+G1 is implemented here as the **accepted / closed offline projection lineage**:
 
 ```text
 Core Integration Input Set
@@ -204,8 +222,8 @@ The runtime harness is documented under:
 runtime/README.md
 ```
 
-The first implementation milestone is offline-only: transport framing/parsing, STATUS validation, frozen occurrence criterion, additive `0.2-story` runtime contracts, evidence retention primitives and preflight tests.
+The published runtime harness includes transport framing/parsing, STATUS validation, the frozen occurrence criterion, additive `0.2-story` runtime contracts, evidence retention, full-phase orchestration, bundle sealing/verification and falsification tests.
 
-Repository CI does not open hardware and produces only an explicit `NOT_RUN` observation report with no presentation or occurrence evidence.
+Repository CI remains offline-only. It does not open hardware and produces an explicit `NOT_RUN` observation report with no presentation or occurrence evidence. The published candidate has **33/33 runtime tests passing**.
 
-Public R2 publication remains **NOT AUTHORIZED**.
+The bounded offline R2 Story and this Reference Project are **published**. Physical FlatSat execution remains **NOT RUN**, so final runtime-phase acceptance and any live semantic assessment remain pending.
