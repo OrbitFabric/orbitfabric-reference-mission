@@ -41,19 +41,21 @@ The executable project remains repository-side under `engineering-stories/01-one
 
 ## R2 — One Intent, Two Executions
 
-R2 is the current Engineering Story in progress.
+The second Engineering Story explores whether one unchanged mission intent can be projected into an independently owned FlatSat runtime, while distinguishing authorized invocation, controlled presentation, target-produced observations, and evidence-supported execution occurrences.
 
-It asks whether one mission operation, expected to execute once, can preserve a trustworthy semantic lineage through projection into an external runtime and then reconcile expected execution multiplicity with runtime-observed multiplicity.
+The published Front Story presents the engineering reasoning and the reproducible offline work; it **does not claim physical FlatSat execution**.
 
 Current status:
 
-- G0 offline identity and deterministic assessment: accepted;
-- G1 PWNSAT / FlatSat projection lineage: accepted;
-- bounded runtime-proof phase: active in Draft PR #13;
-- physical FlatSat execution: **NOT RUN**;
-- final public Story / Technical Deep Dive: not yet published.
+- G0 offline contract and identity proof: **accepted / closed**;
+- G1 offline PWNSAT projection lineage: **accepted / closed**;
+- bounded runtime harness: **implemented and verified offline (33/33 runtime tests at the published candidate)**;
+- physical FlatSat execution: **NOT RUN**, so no physical P1/P2 or accepted E1/E2 and no observed FlatSat multiplicity;
+- final runtime phase acceptance: **pending physical evidence and a separate review**;
+- Technical Deep Dive: **not yet published**.
 
-- [Inspect the accepted R2 repository-side package](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions)
-- [Follow the active R2 Draft PR #13](https://github.com/OrbitFabric/orbitfabric-reference-mission/pull/13)
+- [Read the R2 Front Story](r2-pwnsat/index.md)
+- [Inspect the R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project)
+- [Read the PWNSAT Maintainer Review](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/02-one-intent-two-executions/PWNSAT-MAINTAINER-REVIEW.md)
 
-The runtime candidate remains separate from the accepted `main` baseline until the physical proof is completed and accepted.
+The Story explains why the current evidence is deliberately bounded. New external hardware evidence or maintainer corrections can be added later without rewriting the historical offline conclusions.

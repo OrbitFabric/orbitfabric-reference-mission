@@ -1,6 +1,6 @@
 # R2 - One Intent, Two Executions
 
-This directory contains the repository-side engineering package for R2, **One Intent, Two Executions**.
+This directory contains the current engineering package for R2, **One Intent, Two Executions**.
 
 R2 asks whether one mission operation, expected to execute once, can preserve a trustworthy semantic lineage from OrbitFabric intent through projection into an external runtime and then compare:
 
@@ -9,28 +9,20 @@ expected_execution_count = 1
 observed_execution_count = ?
 ```
 
-## Current status
+Current state:
 
-The accepted `main` baseline contains:
+- G0 identity and deterministic assessment are completed offline;
+- G1 PWNSAT projection lineage is completed offline;
+- the bounded PWNSAT/FlatSat runtime harness is implemented and offline-verified;
+- physical FlatSat execution is **NOT RUN**;
+- no physical P1/P2 presentations or E1/E2 runtime occurrence evidence exist yet.
 
-- G0 offline identity and deterministic assessment;
-- G1 PWNSAT / FlatSat projection lineage;
-- the Story-local Scenario, Projection Profile, target source grounding, retained G1 artifacts, schemas and tests supporting those accepted stages.
+This directory is the engineering/reference package. The [published R2 Front Story](../../docs/engineering-stories/r2-pwnsat/index.md) explains the current offline proof and explicitly identifies physical FlatSat execution as **NOT RUN**. Final runtime acceptance remains pending.
 
-The bounded runtime-proof phase is currently being developed and reviewed in Draft PR #13:
+For an external PWNSAT-oriented review, start here:
 
-- [R2 bounded PWNSAT runtime proof — Draft PR #13](https://github.com/OrbitFabric/orbitfabric-reference-mission/pull/13)
+- [PWNSAT Maintainer Review](PWNSAT-MAINTAINER-REVIEW.md)
 
-That Draft candidate adds the Story-local runtime harness and evidence path needed to compare expected execution multiplicity with runtime-observed multiplicity.
-
-**Physical FlatSat execution has NOT RUN.**
-
-No physical P1/P2 presentations or E1/E2 runtime occurrence evidence are part of the accepted `main` baseline.
-
-R2 is therefore **in progress**. The final public Engineering Story narrative has not yet been published.
-
-## Inspect the accepted repository-side package
+For the executable package, contracts, projection artifacts, runtime harness and detailed technical documentation:
 
 - [Reference Project](reference-project/)
-
-The final published Story and Technical Deep Dive will live under `docs/` only after the runtime proof is complete and accepted.

@@ -11,6 +11,7 @@ docs_dir: docs
 theme:
   name: material
   language: en
+  custom_dir: overrides
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -109,3 +110,5 @@ nav:
       - R1 — One Mission Contract Across Flight and Ground:
           - Story: engineering-stories/r1-flight-ground/index.md
           - Technical Deep Dive: engineering-stories/r1-flight-ground/technical-deep-dive.md
+      - R2 — One Intent, Two Executions:
+          - Front Story: engineering-stories/r2-pwnsat/index.md

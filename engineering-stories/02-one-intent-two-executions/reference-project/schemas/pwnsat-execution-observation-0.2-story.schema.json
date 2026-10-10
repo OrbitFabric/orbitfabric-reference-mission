@@ -1,0 +1,119 @@
+{
+  "$id": "orbitfabric.reference_mission.pwnsat_execution_observation/0.2-story",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "R2 PWNSAT Runtime Execution Observation Report",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {"const": "orbitfabric.reference_mission.pwnsat_execution_observation"},
+    "format_version": {"const": "0.2-story"},
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {"const": "r2-pwnsat-runtime-proof"},
+        "version": {"const": "0.2-story"}
+      },
+      "required": ["id", "version"]
+    },
+    "experiment_definition_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "execution_attempt_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+    "authorized_instance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "local_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+        "authorized_invocation_id": {"type": "string", "pattern": "^r2a:[0-9a-f]{64}$"}
+      },
+      "required": ["local_id", "authorized_invocation_id"]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["NOT_RUN", "COMPLETE", "ABORTED"]},
+        "repository": {"const": "Pwnsat/FlatSat"},
+        "source_commit": {"const": "b5ac0f2ba5e7bd60fbb6994f681c28053777628e"},
+        "transport": {"const": "usb_cdc_serial"},
+        "path": {"const": "wired_local"}
+      },
+      "required": ["status", "repository", "source_commit", "transport", "path"]
+    },
+    "occurrence_criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {"const": "r2.pwnsat.status-occurrence"},
+        "version": {"const": "0.1-story"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "required": ["id", "version", "sha256"]
+    },
+    "preconditions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "identity_binding_valid": {"type": "boolean"},
+        "controlled_runtime_authorized": {"type": "boolean"},
+        "exclusive_command_source": {"type": "boolean"},
+        "observation_channel_clearable": {"type": "boolean"},
+        "reason": {"type": ["string", "null"], "minLength": 1}
+      },
+      "required": ["identity_binding_valid", "controlled_runtime_authorized", "exclusive_command_source", "observation_channel_clearable", "reason"]
+    },
+    "presentations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {"enum": ["P1", "P2"]},
+          "authorized_invocation_id": {"type": "string", "pattern": "^r2a:[0-9a-f]{64}$"},
+          "stimulus_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "transport_frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "presentation_record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "raw_stream_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "status": {"enum": ["NOT_RUN", "PRESENTED", "FAILED"]},
+          "window_start_ns": {"type": ["integer", "null"], "minimum": 0},
+          "window_end_ns": {"type": ["integer", "null"], "minimum": 0},
+          "channel_cleared": {"type": "boolean"}
+        },
+        "required": ["id", "authorized_invocation_id", "stimulus_sha256", "transport_frame_sha256", "presentation_record_sha256", "raw_stream_sha256", "status", "window_start_ns", "window_end_ns", "channel_cleared"]
+      }
+    },
+    "execution_occurrences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^r2e:[0-9a-f]{64}$"},
+          "presentation_id": {"enum": ["P1", "P2"]},
+          "authorized_invocation_id": {"type": "string", "pattern": "^r2a:[0-9a-f]{64}$"},
+          "accepted": {"type": "boolean"},
+          "raw_spp_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "tm_sequence_count": {"type": "integer", "minimum": 0, "maximum": 16383},
+          "status_uptime_seconds": {"type": "integer", "minimum": 0}
+        },
+        "required": ["id", "presentation_id", "authorized_invocation_id", "accepted", "raw_spp_sha256", "tm_sequence_count", "status_uptime_seconds"]
+      }
+    },
+    "evidence_status": {"enum": ["complete", "insufficient", "ambiguous", "not_run"]},
+    "expected_execution_count": {"const": 1},
+    "observed_execution_count": {"type": ["integer", "null"], "minimum": 0},
+    "assessment": {"type": ["string", "null"], "enum": ["CONFORMANT", "DIVERGED", "INCONCLUSIVE", "INVALID_RUN", null]},
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+          "message": {"type": "string", "minLength": 1}
+        },
+        "required": ["code", "message"]
+      }
+    }
+  },
+  "required": ["kind", "format_version", "producer", "experiment_definition_sha256", "execution_attempt_id", "authorized_instance", "runtime", "occurrence_criterion", "preconditions", "presentations", "execution_occurrences", "evidence_status", "expected_execution_count", "observed_execution_count", "assessment", "diagnostics"]
+}
