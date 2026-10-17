@@ -3,7 +3,7 @@
 Editorial decision: use the approved abstract architecture-to-runtime illustration. The cover depicts a semantic architecture crossing into a native runtime, with a single bit, an interrupted telemetry trace, and an unexpected command route reaching a handler.
 
 Asset destination in this repository:
-`docs/assets/engineering-stories/r3-eds-cfs/r3-cover.jpg`
+`docs/engineering-stories/r3-eds-cfs/images/r3-cover.jpg`
 
 Approved image source: original 1731 x 909 PNG, converted without altering the composition for LinkedIn Open Graph.
 
@@ -14,10 +14,10 @@ Prepared export:
 - Bytes: 194398
 - SHA-256: `7fa104c07fc8ef7b226313fbf65dd0c8c2b337d28797506a01a87239d7bb51e3`
 
-Once uploaded as `docs/assets/engineering-stories/r3-eds-cfs/r3-cover.jpg`, the Story front matter should set:
-`story_social_image: assets/engineering-stories/r3-eds-cfs/r3-cover.jpg`
+Once uploaded as `docs/engineering-stories/r3-eds-cfs/images/r3-cover.jpg`, the Story front matter should set:
+`story_social_image: engineering-stories/r3-eds-cfs/images/r3-cover.jpg`
 
 The front Story should display the same image as its lead cover using:
-`![R3 cover: mission semantics crossing into native runtime reality.](../../assets/engineering-stories/r3-eds-cfs/r3-cover.jpg)`
+`![R3 cover: mission semantics crossing into native runtime reality.](../../engineering-stories/r3-eds-cfs/images/r3-cover.jpg)`
 
 Release gate: verify that this exact image exists in the target branch and that the MkDocs Open Graph URL serves an accessible JPEG; then merge, deploy, and check the public page and LinkedIn link preview. Do not treat local `mkdocs build --strict` as external crawler validation.
