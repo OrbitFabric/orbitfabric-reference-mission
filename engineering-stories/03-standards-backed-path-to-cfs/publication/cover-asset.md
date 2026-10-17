@@ -18,6 +18,6 @@ Once uploaded as `docs/engineering-stories/r3-eds-cfs/images/r3-cover.jpg`, the 
 `story_social_image: engineering-stories/r3-eds-cfs/images/r3-cover.jpg`
 
 The front Story should display the same image as its lead cover using:
-`![R3 cover: mission semantics crossing into native runtime reality.](../../engineering-stories/r3-eds-cfs/images/r3-cover.jpg)`
+`![R3 cover: mission semantics crossing into native runtime reality.](images/r3-cover.jpg)`
 
 Release gate: verify that this exact image exists in the target branch and that the MkDocs Open Graph URL serves an accessible JPEG; then merge, deploy, and check the public page and LinkedIn link preview. Do not treat local `mkdocs build --strict` as external crawler validation.
