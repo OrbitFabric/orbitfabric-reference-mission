@@ -25,6 +25,8 @@ It is not flight software, not a spacecraft simulator, not a real mission config
 - [R1 Story: One Mission Contract Across Flight and Ground](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r1-flight-ground/)
 - [R1 Technical Deep Dive](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r1-flight-ground/technical-deep-dive/)
 - [R2 Story: One Intent, Two Executions](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r2-pwnsat/)
+- [R3 Story: One Bit, Zero Telemetry, and an Unknown Command That Ran](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r3-eds-cfs/)
+- [R3 Technical Deep Dive](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r3-eds-cfs/technical-deep-dive/)
 
 ## Two pillars
 
@@ -153,6 +155,18 @@ live semantic assessment    NONE
 - [Inspect the R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project)
 
 R2 is published as an intentionally bounded offline Engineering Story. Physical FlatSat evidence, if later obtained, extends the Story rather than being implied by the current publication.
+
+## R3 - One Bit, Zero Telemetry, and an Unknown Command That Ran
+
+R3 explores a completed standards-backed integration with a native cFS target. A real boolean-width falsification, invalid telemetry topic mapping and unknown Function Code dispatch revealed three separate responsibilities: target representation, mission-owned allocation and native runtime policy.
+
+The initial one-bit EDS realization failed in the exercised native DDS/IDL writer. An adapter-local eight-bit EDS boolean restored the generated interface without changing semantic `bool`. The selected mission's status telemetry was subsequently corrected to a valid identifier, while the final public Profile bound symbolic mission-owned topic references instead of hardcoded generic numbers. Finally, an undefined FC127 invoked a valid native typed handler, and a separate disposable control characterized why.
+
+The source-native P3 verdict is **CHARACTERIZATION PASS** with prospective automatic unknown-command rejection **FALSIFIED**. It is not evidence of a shipped guard, universal EdsLib behavior or flight-hardware execution. R3 preserves original Actions job-log excerpts and provenance without creating a second adapter or a second cFS application.
+
+- [Read the R3 Engineering Story](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r3-eds-cfs/)
+- [Read the native Technical Deep Dive](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r3-eds-cfs/technical-deep-dive/)
+- [Inspect R3 source and evidence package](engineering-stories/03-standards-backed-path-to-cfs/)
 
 ## Repository layout
 

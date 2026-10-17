@@ -148,3 +148,6 @@ jobs:
 
       - name: Build tutorial site strictly
         run: mkdocs build --strict
+
+      - name: Validate R3 source evidence and diagrams
+        run: python engineering-stories/03-standards-backed-path-to-cfs/reference-project/verify_story.py

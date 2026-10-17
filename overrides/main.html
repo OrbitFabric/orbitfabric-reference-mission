@@ -12,6 +12,7 @@
   {{ super() }}
   {% if page and page.meta and page.meta.story_social_title %}
     <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ page.canonical_url }}">
     <meta property="og:title" content="{{ page.meta.story_social_title }}">
     {% if page.meta.story_social_description %}
       <meta property="og:description" content="{{ page.meta.story_social_description }}">

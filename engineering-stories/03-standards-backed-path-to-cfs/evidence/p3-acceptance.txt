@@ -1,0 +1,14 @@
+# P3 characterization acceptance
+status=PASS
+acceptance_semantics=CHARACTERIZATION
+unknown_function_code=127
+observed_behavior=UNDEFINED_FC_DISPATCHED_TO_VALID_TYPED_HANDLER
+observed_handler=payload.enable
+prospective_automatic_rejection_property=FALSIFIED
+edslib_causal_control=PASS
+genuine_nonderived_regression=PASS
+automatic_unknown_fc_rejection_claim=false
+adapter_runtime_guard_added=false
+core_change=false
+projection_profile_change=false
+upstream_semantics_confirmation=PENDING_FOLLOW_UP

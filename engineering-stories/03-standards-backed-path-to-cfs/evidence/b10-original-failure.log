@@ -1,0 +1,28 @@
+# Verbatim selected GitHub Actions job-log excerpts
+# Original repository: OrbitFabric/orbitfabric-eds-cfs-adapter
+# Run: https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308
+# Job ID: 101313400030
+# Artifact ID: none; archive content not reproduced here
+# Purpose: small, contextual raw excerpts, not a complete log or a new native run.
+# Line numbers below refer to 1-based position in the original fetched job log.
+
+# Extract: source log lines 988-1006
+2026-09-05T13:24:11.7166987Z EDS: Compiling src/samplemission_eds_sb_topicdb_impl.c for host
+2026-09-05T13:24:11.7169891Z EDS: Compiling src/samplemission_eds_sb_global_impl.c for host
+2026-09-05T13:24:11.7474092Z EDS: Archiving obj/samplemission_eds_sb_dispatchdb.a for host
+2026-09-05T13:24:11.7476887Z EDS: Linking shared object obj/samplemission_eds_sb_dispatchdb.so for host
+2026-09-05T13:24:11.7529767Z EDS: Linking relocatable object obj/samplemission_eds_sb_dispatchdb.obj for host
+2026-09-05T13:24:11.9319857Z ...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:87: assertion failed! - stack traceback:
+2026-09-05T13:24:11.9321067Z 	...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:87: in local 'line_writer'
+2026-09-05T13:24:11.9322144Z 	...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:233: in function 'write_idl_lineitem'
+2026-09-05T13:24:11.9323309Z 	...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:244: in function 'write_idl_block'
+2026-09-05T13:24:11.9324249Z 	...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:274: in upvalue 'write_idl_container_members'
+2026-09-05T13:24:11.9325140Z 	...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:295: in function 'write_struct'
+2026-09-05T13:24:11.9325853Z 	...b10/tools/eds/cfecfs/missionlib/eds/86-write_dds_idl.lua:535: in main chunk
+2026-09-05T13:24:12.3006010Z Aborted (core dumped)
+2026-09-05T13:24:12.3015007Z gmake[4]: *** [/home/runner/work/_temp/orbitfabric-cfs-b10/tools/eds/tool/cmake/edstool-execute-all.mk:58: obj/edstool-execute-SampleMission.stamp] Error 134
+2026-09-05T13:24:12.3016944Z gmake[3]: *** [CMakeFiles/edstool-execute.dir/build.make:72: CMakeFiles/edstool-execute] Error 2
+2026-09-05T13:24:12.3019403Z gmake[2]: *** [CMakeFiles/Makefile2:1081: CMakeFiles/edstool-execute.dir/all] Error 2
+2026-09-05T13:24:12.3024140Z gmake[1]: *** [CMakeFiles/Makefile2:1088: CMakeFiles/edstool-execute.dir/rule] Error 2
+2026-09-05T13:24:12.3027242Z gmake: *** [Makefile:283: edstool-execute] Error 2
+2026-09-05T13:24:12.3115757Z ##[error]Process completed with exit code 2.

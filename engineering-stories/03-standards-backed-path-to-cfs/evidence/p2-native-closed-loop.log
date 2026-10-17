@@ -1,0 +1,20 @@
+# Verbatim selected GitHub Actions job-log excerpts
+# Original repository: OrbitFabric/orbitfabric-eds-cfs-adapter
+# Run: https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957
+# Job ID: 101471923587
+# Artifact ID: 9987664271; archive content not reproduced here
+# Purpose: small, contextual raw excerpts, not a complete log or a new native run.
+# Line numbers below refer to 1-based position in the original fetched job log.
+
+# Extract: source log lines 5676-5686
+2026-09-06T10:38:09.1779616Z e068223bd996321a46a9a276ed7cb64c215d04d11fccb1cf416eaf5225ad887b /home/runner/work/_temp/orbitfabric-cfs-p2-runtime-apps/of_demo_app/eds/of_demo.xml
+2026-09-06T10:38:09.1806954Z e068223bd996321a46a9a276ed7cb64c215d04d11fccb1cf416eaf5225ad887b /home/runner/work/orbitfabric-eds-cfs-adapter/orbitfabric-eds-cfs-adapter/tests/fixtures/p0_b6/expected.xml
+2026-09-06T10:38:11.1916384Z OF_DEMO_APP runtime initialization observed
+2026-09-06T10:38:12.2020729Z TO_LAB telemetry output enablement observed
+2026-09-06T10:38:13.2126676Z generated OF_DEMO runtime dispatch observed
+2026-09-06T10:38:16.2259124Z EDS decoder identified OF_DEMO PayloadStatusTlm
+2026-09-06T10:38:16.2289964Z EDS decoder observed PayloadEnabled=true
+2026-09-06T10:38:16.3671485Z staged of_demo_app module for startup control /home/runner/work/_temp/orbitfabric-cfs-p2-runtime/build-native_eds/exe/cpu1/cf/of_demo_app.so
+2026-09-06T10:38:18.3769406Z startup control cFS operational state observed
+2026-09-06T10:38:20.5079359Z e068223bd996321a46a9a276ed7cb64c215d04d11fccb1cf416eaf5225ad887b /home/runner/work/orbitfabric-eds-cfs-adapter/orbitfabric-eds-cfs-adapter/tests/fixtures/p0_b6/expected.xml
+2026-09-06T10:38:20.5080793Z P2-A EDS-backed runtime command/telemetry proof and startup dependency control completed

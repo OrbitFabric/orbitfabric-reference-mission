@@ -1,0 +1,7 @@
+# P2-A runtime acceptance
+1980-012-14:03:20.55712 OF_DEMO_APP: initialized with EDS CMD topic 160 and STATUS_TLM topic 416
+EVS Port1 1980-012-14:03:21.09646 66/1/TO_LAB 3: TO telemetry output enabled for IP 127.0.0.1
+1980-012-14:03:21.10300 OF_DEMO_APP: payload.enable dispatched through generated EDS interface
+Using result from EDS encoder
+Formatcode=00110007 / OF_DEMO/PayloadStatusTlm
+EDS_DecodeDisplay(): Bit=128               Payload.PayloadEnabled = true

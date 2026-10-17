@@ -58,3 +58,15 @@ The Front Story retains a commit-pinned Reference Project link as an archival pu
 - [Read the PWNSAT Maintainer Review](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/02-one-intent-two-executions/PWNSAT-MAINTAINER-REVIEW.md)
 
 The Story explains why the current evidence is deliberately bounded. New external hardware evidence or maintainer corrections can be added later without rewriting the historical offline conclusions.
+
+## R3: One Bit, Zero Telemetry, and an Unknown Command That Ran
+
+The third Engineering Story follows an existing native EDS-cFS integration, including a real DDS/IDL generation failure, a command that ran without successful status telemetry, and an undefined Function Code that reached a valid typed handler.
+
+The same mission meaning travels through explicit target representation, mission-owned identifier allocation, and native runtime dispatch. Each boundary remains separately responsible for what it accepts and what it guarantees.
+
+The published product's historical P0-P3 native evidence is inspectable through retained source log excerpts, exact pinned references, causal controls and engineering diagrams. P3 is **accepted characterization**, not automatic rejection of unknown commands. The Story makes no claim of physical flight-hardware execution.
+
+- [Read R3: One Bit, Zero Telemetry, and an Unknown Command That Ran](r3-eds-cfs/index.md)
+- [Inspect R3 Technical Deep Dive](r3-eds-cfs/technical-deep-dive.md)
+- [R3 native source and retained evidence index](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/03-standards-backed-path-to-cfs)

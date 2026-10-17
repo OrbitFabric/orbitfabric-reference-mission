@@ -1,0 +1,17 @@
+# Selected original native cFS runtime observations, first P2 diagnostic
+# Source run: https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34024060461
+# Source archive: artifact 9986514078
+# Archive SHA-256: d9030502210a4ce4040a4f31dc8fb35b0df5253a5f0a05192d5f3cc8be67c97b
+# Source file: cfs-runtime.log
+# Selected original line numbers: 124-125, 128, 165-169 (not the complete log)
+
+1980-012-14:03:20.55591 OF_DEMO_APP: mapped CMD topic 160 -> MID 0x00001897; STATUS_TLM topic 161 -> MID 0x00000000
+1980-012-14:03:20.55592 OF_DEMO_APP: after CFE_MSG_Init status telemetry MID=0x00000000
+
+1980-012-14:03:20.55595 OF_DEMO_APP: initialized with EDS CMD topic 160 and STATUS_TLM topic 161
+
+1980-012-14:03:21.05263 OF_DEMO_APP: before payload update status telemetry MID=0x00000000
+1980-012-14:03:21.05265 OF_DEMO_APP: before transmit status telemetry MID=0x00000000
+EVS Port1 1980-012-14:03:21.05265 66/1/CFE_SB 21: Send Err:Invalid MsgId(0x0)in msg,App OF_DEMO_APP
+1980-012-14:03:21.05268 OF_DEMO_APP: status telemetry transmit failed, RC=0xffffffffca000003
+1980-012-14:03:21.05269 OF_DEMO_APP: generated EDS dispatch rejected command, RC=0xffffffffca000003

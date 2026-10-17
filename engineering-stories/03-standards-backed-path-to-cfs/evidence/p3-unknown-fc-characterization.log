@@ -1,0 +1,44 @@
+# Verbatim selected GitHub Actions job-log excerpts
+# Original repository: OrbitFabric/orbitfabric-eds-cfs-adapter
+# Run: https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662
+# Job ID: 101529767431
+# Artifact ID: 9994084984; archive content not reproduced here
+# Purpose: small, contextual raw excerpts, not a complete log or a new native run.
+# Line numbers below refer to 1-based position in the original fetched job log.
+
+# Extract: source log lines 5671-5687
+2026-09-06T17:41:30.5090901Z P3 OF_DEMO runtime initialization observed
+2026-09-06T17:41:31.5512888Z P3 stop/reopen: unknown Function Code invoked valid typed handler payload.enable
+2026-09-06T17:41:31.5522692Z # P3-C2 unknown Function Code conformance result
+2026-09-06T17:41:31.5523419Z command_mid=0x00001897
+2026-09-06T17:41:31.5523811Z derived_apid=0x97
+2026-09-06T17:41:31.5524135Z unknown_function_code=127
+2026-09-06T17:41:31.5524591Z host_encoder=PassThrough
+2026-09-06T17:41:31.5524955Z host_eds_encoder_used=false
+2026-09-06T17:41:31.5525225Z probe_runtime_start_line=168
+2026-09-06T17:41:31.5525515Z classification=VALID_TYPED_HANDLER_INVOKED
+2026-09-06T17:41:31.5525899Z first_observed_boundary=GENERATED_OF_DEMO_TYPED_HANDLER
+2026-09-06T17:41:31.5526268Z target_ingress_observed=true
+2026-09-06T17:41:31.5526555Z valid_generated_typed_handler_invoked=true
+2026-09-06T17:41:31.5526871Z valid_handler=payload.enable
+2026-09-06T17:41:31.5527170Z # relevant target diagnostics after probe
+2026-09-06T17:41:31.5527708Z 1980-012-14:03:25.95246 OF_DEMO_APP: payload.enable dispatched through generated EDS interface
+2026-09-06T17:41:31.6774881Z ##[error]Process completed with exit code 1.
+
+# Extract: source log lines 5701-5716
+2026-09-06T17:42:13.1584536Z P3 EdsLib control OF_DEMO initialization observed
+2026-09-06T17:42:19.3573007Z P3 F4 NASA sample_app initialization observed
+2026-09-06T17:42:19.3600583Z P3 F4 cFS operational state observed
+2026-09-06T17:42:19.3628460Z P3 F4 runtime-derived SAMPLE_APP SendHk MsgId observed
+2026-09-06T17:42:20.5240494Z P3 EdsLib derived-dispatch control PASS including F4 non-derived regression
+2026-09-06T17:42:20.5275918Z ##[group]Run bash .github/scripts/p3-postmortem.sh
+2026-09-06T17:42:20.5276349Z [36;1mbash .github/scripts/p3-postmortem.sh[0m
+2026-09-06T17:42:20.5312984Z shell: /usr/bin/bash -e {0}
+2026-09-06T17:42:20.5313241Z ##[endgroup]
+2026-09-06T17:42:20.5476511Z P3 postmortem classification: UNDEFINED_FC_DISPATCHED_TO_VALID_TYPED_HANDLER
+2026-09-06T17:42:20.5477416Z P3 EdsLib causal control: PASS
+2026-09-06T17:42:20.5506002Z ##[group]Run bash .github/scripts/p3-acceptance.sh
+2026-09-06T17:42:20.5506603Z [36;1mbash .github/scripts/p3-acceptance.sh[0m
+2026-09-06T17:42:20.5541170Z shell: /usr/bin/bash -e {0}
+2026-09-06T17:42:20.5541421Z ##[endgroup]
+2026-09-06T17:42:20.5764766Z P3 characterization acceptance PASS
