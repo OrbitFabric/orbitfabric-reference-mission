@@ -69,13 +69,13 @@ The current surface families are:
 | Runtime-facing artifacts | Contract bindings for onboard software integration review. | Generated integration output. |
 | Ground-facing artifacts | Dictionaries, manifests and review artifacts for ground-side integration review. | Generated integration output. |
 | `dashboard_summary.json` / `scenario_run_index.json` / `coverage_summary.json` | Structured dashboard, indexing and coverage foundations. | v1.1 candidate integration surfaces. |
-| `mission_snapshot.json` | Complete loaded Mission Model in a versioned read-only envelope. | Current post-v1.1 candidate development. |
+| `mission_snapshot.json` | Complete loaded Mission Model in a versioned read-only envelope. | Stable Core-owned integration/inspection surface since v1.2.0; format identifier remains `0.1-candidate`. |
 
 ## Current FDIR relationship relevance
 
 The Reference Mission contains explicit low-power and degraded-pointing protection logic that is especially useful for downstream navigation.
 
-Current post-v1.1 Core development can expose additive relationship families for:
+Core v1.2.0 admitted the following additive stable-compatible FDIR relationship families:
 
 - fault-observed telemetry;
 - fault recovery commands;
