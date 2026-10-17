@@ -1,5 +1,7 @@
 # Using PWNSAT FlatSat as an External Runtime for OrbitFabric R2
 
+> **Current reading path:** The [R2 Engineering Story](https://orbitfabric.github.io/orbitfabric-reference-mission/engineering-stories/r2-pwnsat/) and [R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project) are published as bounded offline work. Physical FlatSat execution remains **NOT RUN**. This note requests external review of the source-grounded runtime assumptions; it does not assert completed maintainer validation. Commit-pinned copies shared earlier remain historical snapshots.
+
 ## The question
 
 OrbitFabric R2 is a systems/runtime-verification experiment about semantic continuity, execution multiplicity and evidence provenance.
@@ -113,7 +115,7 @@ We would especially value a technical review of these points:
 - Are `TM_STATUS` sequence identity and STATUS uptime sensible native facts for distinguishing successive runtime observations?
 - Are there target/runtime assumptions in our source-derived model that you would change?
 - Is there another supported way to exercise this runtime boundary without owning a physical FlatSat?
-- Is there a better PWNSAT-native observation you would recommend for distinguishing accepted execution occurrences?
+- Is there a stronger FlatSat-native observation than TM sequence identity and STATUS uptime that could distinguish two actual `GET_STATUS` handler executions, rather than only two distinct `TM_STATUS` packets?
 
 The intent is to validate the runtime model before any physical experiment, not to ask PWNSAT to adopt OrbitFabric-specific semantics.
 

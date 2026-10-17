@@ -91,19 +91,23 @@ The Reference Mission is intentionally **contract-level**. It is not flight soft
 
 ## Release posture represented here
 
-The tutorial deliberately distinguishes:
+The tutorial distinguishes **historical Core compatibility milestones**, not successive descriptions of the current Core release:
 
 ```text
 v1.0.0
   Stable Mission Data Contract baseline
 
 v1.1.0
-  Published candidate integration surface consolidation
+  Candidate dashboard, scenario-run and coverage inspection surfaces
 
-current post-v1.1 Core development
-  candidate Mission Snapshot
-  additive explicit FDIR relationship families
+v1.2.0
+  Stable Core-owned Mission Snapshot and coherent Core Integration Input Set
+  Seven additive stable-compatible FDIR Relationship Manifest families
 ```
+
+The Mission Snapshot retains the format identifier `0.1-candidate` even though its documented integration/inspection boundary is stable from v1.2.0. Surface format identifiers and stability classifications are distinct. See the [Core v1.2 stability decision](https://github.com/OrbitFabric/orbitfabric/blob/main/docs/reference/v1.2-integration-input-stability-decision.md).
+
+For the currently published Core version, consult [Core Architecture](https://github.com/OrbitFabric/orbitfabric/blob/main/docs/ARCHITECTURE.md). Engineering Stories retain their exact accepted Core source baselines for reproduction.
 
 The Studio section targets **OrbitFabric Studio 0.15.0 Preview 1** and documents only implemented behavior.
 
