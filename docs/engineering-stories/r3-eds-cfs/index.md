@@ -123,7 +123,7 @@ The first runtime loop provided the next answer.
 
 The host used the native EDS-aware command path. \`ci_lab\` received the command. Generated dispatch reached \`OF_DEMO_APP_PayloadEnableCmd\`. The handler attempted to transmit \`PayloadStatusTlm\`.
 
-The selected mission's telemetry topic was wrong.
+The selected mission's telemetry topic was wrong. The [original native runtime excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) preserves the initial topic-to-MID mapping and the actual Software Bus rejection, rather than relying only on the corrected green run.
 
 The initial reference binding used status telemetry TopicId \`161\`. In that particular SampleMission allocation, the value fell into the command-side range and mapped to \`MsgId 0x00000000\` for the telemetry conversion. The Software Bus rejected the result.
 
