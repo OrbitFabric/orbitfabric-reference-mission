@@ -112,3 +112,6 @@ nav:
           - Technical Deep Dive: engineering-stories/r1-flight-ground/technical-deep-dive.md
       - R2 — One Intent, Two Executions:
           - One Intent, Two Executions: engineering-stories/r2-pwnsat/index.md
+      - R3 - A Standards-Backed Path to cFS:
+          - One Bit, Zero Telemetry, and an Unknown Command That Ran: engineering-stories/r3-eds-cfs/index.md
+          - Technical Deep Dive: engineering-stories/r3-eds-cfs/technical-deep-dive.md
