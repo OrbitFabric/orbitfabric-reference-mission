@@ -14,10 +14,10 @@ Prepared export:
 - Bytes: 194398
 - SHA-256: `7fa104c07fc8ef7b226313fbf65dd0c8c2b337d28797506a01a87239d7bb51e3`
 
-Once uploaded as `docs/engineering-stories/r3-eds-cfs/images/r3-cover.jpg`, the Story front matter should set:
+Uploaded and SHA-verified as `docs/engineering-stories/r3-eds-cfs/images/r3-cover.jpg`. The Story front matter now sets:
 `story_social_image: engineering-stories/r3-eds-cfs/images/r3-cover.jpg`
 
-The front Story should display the same image as its lead cover using:
+The front Story displays the same image as its lead cover using:
 `![R3 cover: mission semantics crossing into native runtime reality.](images/r3-cover.jpg)`
 
-Release gate: verify that this exact image exists in the target branch and that the MkDocs Open Graph URL serves an accessible JPEG; then merge, deploy, and check the public page and LinkedIn link preview. Do not treat local `mkdocs build --strict` as external crawler validation.
+Release gate: image content is present and SHA-verified in the PR branch. Complete branch-alignment CI; then merge, deploy, and check the public page and LinkedIn link preview. Do not treat local `mkdocs build --strict` as external crawler validation.
