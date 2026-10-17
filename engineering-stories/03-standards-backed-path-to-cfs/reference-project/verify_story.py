@@ -92,6 +92,11 @@ def check() -> None:
     for page in r3_markdown:
         markdown = page.read_text(encoding="utf-8")
         assert (chr(92) + chr(96)) not in markdown, f"escaped backtick in {page}"
+        r3_repo_root = "https://github.com/OrbitFabric/orbitfabric-reference-mission/"
+        for link_kind in ("blob", "tree"):
+            unsafe = r3_repo_root + f"{link_kind}/main/engineering-stories/03-standards-backed-path-to-cfs/"
+            assert unsafe not in markdown, f"R3 evidence link points to unmerged main: {page}"
+
         code_fences = re.findall(r"(?m)^" + chr(96) * 3, markdown)
         assert len(code_fences) % 2 == 0, f"unbalanced fenced blocks: {page}"
 
@@ -104,9 +109,12 @@ def check() -> None:
     assert (PKG / "evidence" / "README.md").is_file()
     assert (PKG / "evidence" / "NATIVE-ARTIFACTS.md").is_file()
     assert "r3-eds-cfs/index.md" in (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
+    assert (DOC / "technical-deep-dive.md").is_file(), "missing Technical Deep Dive page"
     index = (DOC / "index.md").read_text(encoding="utf-8")
     assert "acceptance_semantics=CHARACTERIZATION" in index
     assert "prospective_automatic_rejection_property=FALSIFIED" in index
+    assert "[Technical Deep Dive](technical-deep-dive.md)" in index
+    assert "[EdsLib upstream question](https://github.com/nasa/EdsLib/issues/120)" in index
     print("R3 source evidence, SHA-256, XML figures and narrative guards: PASS")
 
 if __name__ == "__main__":
