@@ -1,0 +1,14 @@
+# P3-C2 unknown Function Code conformance result
+command_mid=0x00001897
+derived_apid=0x97
+unknown_function_code=127
+host_encoder=PassThrough
+host_eds_encoder_used=false
+probe_runtime_start_line=168
+classification=VALID_TYPED_HANDLER_INVOKED
+first_observed_boundary=GENERATED_OF_DEMO_TYPED_HANDLER
+target_ingress_observed=true
+valid_generated_typed_handler_invoked=true
+valid_handler=payload.enable
+# relevant target diagnostics after probe
+1980-012-14:03:25.95246 OF_DEMO_APP: payload.enable dispatched through generated EDS interface
