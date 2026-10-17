@@ -36,8 +36,6 @@ The public adapter [Integration Coverage](https://github.com/OrbitFabric/orbitfa
 | Command-specific response | Fixed `of_demo_app` | Execute typed handler and publish status telemetry |
 | Policy beyond native representation | Selected target and application | Enforce range/selector rules only if implemented and evidenced |
 
-![The separate authority boundaries in the native realization.](images/05-authority-matrix.svg)
-
 The [generated EDS fixture](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/tests/fixtures/p0_b6/expected.xml) demonstrates the target representation. It contains both `Boolean8` and `ValidRange` as well as the symbolic TopicId initial values. The generated interface references are not a claim that every runtime validates every representation constraint.
 
 ## 3. P0 and B10: byte alignment without semantic mutation
@@ -96,8 +94,6 @@ The first P2 issue was a **mission mapping mismatch**:
 | Command path in selected SampleMission | 160 | `0x1897` | Native command dispatch works |
 
 These are values of the **selected sample mission**, not a reusable OrbitFabric allocation table. The [original failed P2 runtime source](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) is retained from a digest-verified Actions archive. The [corrected native acceptance record](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-a-acceptance.txt) is separately retained.
-
-![Comparison of incorrect status mapping, working native allocation, and symbolic ownership.](images/03-topic-allocation.svg)
 
 The later public Profile references:
 
@@ -182,7 +178,90 @@ The green P3 workflow does **not** mean the original native runtime rejects unkn
 
 An upstream intended-semantics question is tracked in [NASA EdsLib issue #120](https://github.com/nasa/EdsLib/issues/120). Until an authoritative resolution, the Story must not classify the fallback as a universal EdsLib defect or security vulnerability. It also must not claim that the disposable control exists in the shipped product.
 
-## 6. Retained evidence and integrity
+## 6. Source-level dispatch trace: where the ambiguity enters
+
+The Story reports that an undefined Function Code reached a valid handler. This section follows the **pinned native source** to explain the narrower causal chain and the question left open for upstream maintainers. It is a source reading tied to the historical P3 observations, not a newly executed native experiment.
+
+### 6.1 From the received buffer to an argument type
+
+In the pinned [EdsLib dispatcher, `CFE_EDSMSG_Dispatch()`](https://github.com/nasa/EdsLib/blob/2acc963b34f77692c6396555dcfb10ef43eb1046/cfecfs/edsmsg/fsw/src/edsmsg_dispatcher.c#L305-L357), the received Software Bus buffer passes through topic and component checks. If the component matches, the dispatcher calls `CFE_EDSMSG_Dispatch_FindArgType()` to establish an argument type and a dispatch-table position.
+
+The decision chain in the exercised source is:
+
+```text
+CFE_EDSMSG_Dispatch
+  -> GetTopicInfo / CheckComponentMatch
+  -> FindArgType
+       -> FindArgBaseType
+       -> CheckActualBufferType
+            -> IdentifyBufferWithSize(base type, received buffer)
+               SUCCESS:
+                 use identified derived type and its table index
+               non-SUCCESS:
+                 keep base type and select dispatch position 0
+            -> GetTypeInfo(selected type)
+            -> compare declared byte size with received message size
+  -> if CFE_SUCCESS, LookupHandler(dispatch position)
+  -> if handler exists, invoke Handler(buffer)
+```
+
+The critical transition is in [`CFE_EDSMSG_Dispatch_CheckActualBufferType()`, lines 202-249](https://github.com/nasa/EdsLib/blob/2acc963b34f77692c6396555dcfb10ef43eb1046/cfecfs/edsmsg/fsw/src/edsmsg_dispatcher.c#L202-L249). On successful identification, the dispatcher selects the derived EDS type and the corresponding `DerivativeTableIndex`. On a non-success result, it selects **position zero** and retains the base type.
+
+The subsequent `GetTypeInfo()` and message-length check still run. A non-matching selector therefore does **not** imply that every malformed command passes. In the exercised FC127 packet, the remaining checks allowed lookup of position zero, which resolved to the valid `payload.enable` handler. That is the bounded observed result.
+
+### 6.2 Where the no-match status originates
+
+The dispatcher does not itself decode a Function Code and classify it as unknown. It delegates derived-type identification to `EdsLib_DataTypeDB_IdentifyBufferWithSize()`.
+
+The [pinned API implementation](https://github.com/nasa/EdsLib/blob/2acc963b34f77692c6396555dcfb10ef43eb1046/edslib/fsw/src/edslib_datatypedb_api.c#L1191-L1230) returns the result of `EdsLib_DataTypeIdentifyBuffer_Impl()`. In the [pinned constraint implementation](https://github.com/nasa/EdsLib/blob/2acc963b34f77692c6396555dcfb10ef43eb1046/edslib/fsw/src/edslib_datatypedb_constraints.c#L567-L611), the result starts as `EDSLIB_NO_MATCHING_VALUE` and becomes `EDSLIB_SUCCESS` only if an identification sequence yields a matching derivative. Other unsuccessful outcomes can exist, so the broad non-success branch in the dispatcher must not be described as exclusively handling unknown Function Codes.
+
+The resulting ambiguity is about **two different meanings of an unsuccessful derivative-identification attempt**:
+
+| Base argument type | Identification outcome | Position-zero question |
+| --- | --- | --- |
+| Has declared derivatives and the selector matches | Success with derived type and table index | No fallback needed |
+| Has declared derivatives but the selector matches none | No matching derivative | Should this select the first handler or fail? |
+| Has no derivatives | No derived type to select | Position zero may legitimately identify the sole handler |
+
+The original pinned dispatcher maps both unsuccessful situations to position zero. The P3 test falsified an assumed automatic rejection property for the particular OF_DEMO family. It did not establish a universal dispatch-safety classification.
+
+### 6.3 The earlier implementation and the isolated causal control
+
+An [earlier EdsLib dispatcher implementation](https://github.com/nasa/EdsLib/blob/7eb94477c5aa32a2dba1f342df720a56722821a1/cfecfs/edsmsg/fsw/src/cfe_msg_dispatcher.c#L111-L138) used native MissionLib metadata to distinguish the presence of subcommands. When `SubcommandArgumentId == 1` and `NumSubcommands > 0`, a failed derived identification returned `CFE_STATUS_UNKNOWN_MSG_ID`. A genuinely non-derived command did not enter that derived-command branch.
+
+This is a **historical implementation difference**, not by itself proof that the later implementation introduced a defect. The intended semantics of the newer path remain an upstream question.
+
+For the separate P3 causal control, the [public evidence-only script](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/.github/scripts/p3-edslib-derived-dispatch-control.sh) temporarily changed the disposable native build to consult `EdsLib_DataTypeDB_GetDerivedInfo()` and `NumDerivatives` after unsuccessful identification:
+
+```text
+identification did not succeed
+  -> read base-type derivative metadata
+     metadata error OR NumDerivatives > 0
+       -> CFE_STATUS_VALIDATION_FAILURE
+     otherwise
+       -> retain legitimate position-zero path
+```
+
+This was a **test intervention**, not an adapter change, an accepted EdsLib patch, or a proposed general-purpose policy. It was designed to discriminate between the two interpretations while retaining both positive derived commands and a genuinely non-derived command.
+
+| Probe | Unmodified pinned runtime | Disposable causal control |
+| --- | --- | --- |
+| OF_DEMO FC0 | Typed `payload.enable` observed | Typed `payload.enable` preserved |
+| OF_DEMO FC1 | Typed `payload.set_period` observed | Typed `payload.set_period` preserved |
+| OF_DEMO FC127, no declared derivative | `payload.enable` invoked unexpectedly | Rejected at generated OF_DEMO dispatch |
+| NASA `SAMPLE_APP/SEND_HK`, genuinely non-derived | No separate baseline claim made here | Legitimate position-zero handler observed |
+
+The separately retained [FC127 observation](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-function-code-result.txt) and [causal-control result](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-edslib-causal-control.txt) are native records extracted from the historical Actions archive. The [P3 acceptance script](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/.github/scripts/p3-acceptance.sh) classifies the complete result as `CHARACTERIZATION`, with the prospective automatic-rejection property `FALSIFIED`.
+
+### 6.4 Why the question was taken upstream
+
+After the observed dispatch and causal controls, one ownership boundary remained: defining the **intended** behavior of the native dispatcher. On September 7, 2026, [NASA EdsLib issue #120](https://github.com/nasa/EdsLib/issues/120) was opened as a request for clarification, with the runtime bytes, source path, prior implementation, distinct control cases, and evidence-only intervention.
+
+The issue asks whether position-zero fallback is intentional when a base argument has registered derivatives but no selector matches, whether the genuinely non-derived case should be distinguished, and which dispatch status would be appropriate if unmatched derived commands are intended to fail. It does **not** assert an upstream vulnerability or submit the disposable experiment as a production fix.
+
+The issue remains open, with no upstream resolution incorporated into this historical proof. Reproducing the observation and clarifying intended semantics are separate steps; neither should be substituted for the other.
+
+## 7. Retained evidence and integrity
 
 The [retained R3 evidence index](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/README.md) provides:
 
@@ -197,7 +276,7 @@ This is **source preservation**, not newly generated evidence. It reduces relian
 
 Inspect the actual generated EDS fixture and application source when evaluating structural claims. Inspect the native scripts for control behavior. Inspect historical job-log excerpts for runtime observations. Use the three together rather than allowing any one to stand in for the others.
 
-## 7. Bounded reproduction entrypoint
+## 8. Bounded reproduction entrypoint
 
 The [Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/reference-project) indexes the exact proof scripts, pins, source inputs and expected observations. The native project is owned by the adapter repository; R3 does not fork `of_demo_app` or maintain a second EDS implementation.
 
@@ -211,7 +290,7 @@ A person attempting to reproduce the historical lane should:
 
 These workflows have native dependencies and require an appropriate Linux build environment. Their historical acceptance does not guarantee that every modern runner, upstream dependency or arbitrary selected cFS mission will reproduce the same result without environment parity.
 
-## 8. Final interpretation
+## 9. Final interpretation
 
 The Story verifies one standards-backed target path with meaningful native behavior. It does not prove a generic spacecraft generator, all EDS constraints enforced at runtime, automatic unknown-command rejection, deployed flight hardware or unqualified cFS security.
 
