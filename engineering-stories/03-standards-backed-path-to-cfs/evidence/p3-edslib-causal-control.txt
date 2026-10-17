@@ -1,0 +1,21 @@
+# P3 EdsLib derived-dispatch control
+control_scope=evidence_harness_only
+product_patch=false
+edslib_commit=2acc963b34f77692c6396555dcfb10ef43eb1046
+candidate_rule=base_has_derivatives_and_no_match_must_fail_closed
+positive_fc0=payload.enable_observed
+positive_fc1=payload.set_period_1000_observed
+unknown_function_code=127
+unknown_probe_encoder=PassThrough
+unknown_classification=REJECTED_AT_GENERATED_OF_DEMO_DISPATCH
+# unknown-probe relevant runtime evidence
+1980-012-14:03:40.59937 OF_DEMO_APP: generated EDS dispatch rejected command, RC=0xffffffffc8000007
+nonderived_control_interface=SAMPLE_APP/SEND_HK
+nonderived_control_model=GENUINELY_NON_DERIVED_TELECOMMAND
+nonderived_control_encoder=PassThrough
+nonderived_control_injection=runtime_derived_cfsv1_header_only
+nonderived_runtime_mid=0x00001883
+nonderived_runtime_apid=0x83
+nonderived_handler_observed=true
+# non-derived relevant runtime evidence
+1980-012-14:03:21.05215 P3 F4: SAMPLE_APP SendHk non-derived handler invoked
