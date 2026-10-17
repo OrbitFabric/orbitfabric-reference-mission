@@ -73,9 +73,9 @@ Studio consumes, links, organizes and renders.
 
 Studio must never be described as a second Mission Data Contract implementation or as the source of mission semantics.
 
-## Rule for future prompts
+## Continuity rules for documentation updates
 
-Any future follow-up prompt for another chat must preserve this editorial line:
+Future documentation revisions should preserve these established editorial and architectural boundaries:
 
 ```text
 Do not present the validated model as if it were the tutorial sequence.
