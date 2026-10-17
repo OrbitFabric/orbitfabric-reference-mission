@@ -36,6 +36,15 @@ EXPECTED = {
     ),
 }
 
+NATIVE = {
+    "p2-original-invalid-topic.log": "207643c4820e25e44311f78c29b3922977af0017e4151587e6257ab65d6a1b8c",
+    "p2-a-acceptance.txt": "06643909191411f4b6267400f49c785d385d5801f98340f472bb205c72e0bfb1",
+    "p3-acceptance.txt": "3e7076d4500065a42352325af430e61e82f7ac5b7fda87396320438fe19fd4e3",
+    "p3-unknown-function-code-result.txt": "f8c968f809a0195913c827ac92c1948fad99a5f898709042076b75a8959bd571",
+    "p3-edslib-causal-control.txt": "2da25c8b2f8b0123fbba214e3df16d1cf8736fb85238a7b5f32656486e833223",
+    "p2-b-valid-range-observation.tsv": "17ec1d45578e9bb554694cbb188ec760d10cd89610504a6ebc7353a38deb4cc7",
+}
+
 FIGURES = tuple(f"{i:02d}-{name}.svg" for i, name in [
     (1, "standards-backed-path"),
     (2, "one-bit-boolean8"),
@@ -53,6 +62,10 @@ def check() -> None:
         text = content.decode("utf-8")
         for marker in markers:
             assert marker in text, f"source marker missing: {name}: {marker}"
+
+    for name, expected in NATIVE.items():
+        actual = hashlib.sha256((PKG / "evidence" / name).read_bytes()).hexdigest()
+        assert actual == expected, f"original native record digest mismatch: {name}: {actual}"
 
     for name in FIGURES:
         svg = DOC / "images" / name
@@ -72,6 +85,7 @@ def check() -> None:
 
     assert (PKG / "reference-project" / "README.md").is_file()
     assert (PKG / "evidence" / "README.md").is_file()
+    assert (PKG / "evidence" / "NATIVE-ARTIFACTS.md").is_file()
     assert "r3-eds-cfs/index.md" in (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
     index = (DOC / "index.md").read_text(encoding="utf-8")
     assert "acceptance_semantics=CHARACTERIZATION" in index
