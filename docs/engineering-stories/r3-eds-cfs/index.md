@@ -216,7 +216,15 @@ With that evidence-only intervention:
 
 That last control matters. A blanket ban on position zero might have "fixed" the one negative test while breaking an entirely valid command family.
 
-The product adapter was not changed to install this intervention. The pinned EdsLib code used in the original observation was not silently replaced. The interpretation remained bounded pending upstream clarification, tracked in [nasa/EdsLib issue #120](https://github.com/nasa/EdsLib/issues/120).
+The product adapter was not changed to install this intervention. The pinned EdsLib code used in the original observation was not silently replaced.
+
+That left a question which the runtime evidence alone could not answer: **was the position-zero fallback intentional for a command family that declared derivatives but matched none of them?**
+
+The distinction was not academic. Position zero is legitimate for a genuinely non-derived command. In the exercised derived family, however, an undefined selector had reached the first typed handler. Inspecting an earlier EdsLib dispatcher implementation also showed that the historical path had treated failed derivative identification differently. That comparison was worth raising, but did not by itself establish a regression.
+
+So I opened [NASA EdsLib issue #120](https://github.com/nasa/EdsLib/issues/120), sharing the native observation, the separate causal control, and the relevant source history. I framed it as a question about **intended dispatch semantics**, without declaring an upstream defect or presenting the disposable intervention as a production patch.
+
+The pinned runtime had shown what happened. The upstream question asks what behavior the interface is intended to guarantee. As of this Story, that clarification remains open.
 
 ### Why a green P3 workflow needs explanation
 
