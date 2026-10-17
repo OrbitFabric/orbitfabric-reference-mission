@@ -110,9 +110,17 @@ def check() -> None:
     assert (PKG / "evidence" / "NATIVE-ARTIFACTS.md").is_file()
     assert "r3-eds-cfs/index.md" in (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
     assert (DOC / "technical-deep-dive.md").is_file(), "missing Technical Deep Dive page"
+    cover = DOC / "images" / "r3-cover.jpg"
+    assert cover.is_file(), "approved social cover missing"
+    assert cover.stat().st_size == 194398, "unexpected social cover size"
+    assert hashlib.sha256(cover.read_bytes()).hexdigest() == (
+        "7fa104c07fc8ef7b226313fbf65dd0c8c2b337d28797506a01a87239d7bb51e3"
+    ), "approved social cover has changed"
     index = (DOC / "index.md").read_text(encoding="utf-8")
     assert "acceptance_semantics=CHARACTERIZATION" in index
     assert "prospective_automatic_rejection_property=FALSIFIED" in index
+    assert "story_social_image: engineering-stories/r3-eds-cfs/images/r3-cover.jpg" in index
+    assert "](images/r3-cover.jpg)" in index, "approved cover not visible in Story"
     assert "[Technical Deep Dive](technical-deep-dive.md)" in index
     assert index.index("[Technical Deep Dive](technical-deep-dive.md)") < index.index("[Native Proof Sources & Evidence]"), "Deep Dive should be first footer link"
     assert "[EdsLib Upstream Question #120](https://github.com/nasa/EdsLib/issues/120)" in index
