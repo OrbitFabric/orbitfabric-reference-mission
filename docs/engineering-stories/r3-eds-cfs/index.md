@@ -21,9 +21,9 @@ The experiment was already real before there was any intention to turn it into a
 
 ## First, a command that seemed to work
 
-The command was \`payload.enable\`.
+The command was `payload.enable`.
 
-By the time the first runtime test was assembled, the adapter had projected the selected mission definitions into an EDS package. A fixed test application, \`of_demo_app\`, consumed the generated native interface. Its \`PayloadEnableCmd\` handler set the \`PayloadEnabled\` telemetry field to true, then used \`CFE_SB_TransmitMsg\` to publish a status message.
+By the time the first runtime test was assembled, the adapter had projected the selected mission definitions into an EDS package. A fixed test application, `of_demo_app`, consumed the generated native interface. Its `PayloadEnableCmd` handler set the `PayloadEnabled` telemetry field to true, then used `CFE_SB_TransmitMsg` to publish a status message.
 
 The incoming part worked. The typed handler ran.
 
@@ -41,7 +41,7 @@ The [OrbitFabric EDS-cFS adapter](https://github.com/OrbitFabric/orbitfabric-eds
 
 The relevant chain was:
 
-\`\`\`text
+```text
 mission contract
   -> integration input facts
   -> explicit EDS-cFS Projection Profile
@@ -49,7 +49,7 @@ mission contract
   -> NASA EdsLib and MissionLib materialization
   -> generated cFS native interfaces
   -> selected cFS application and runtime
-\`\`\`
+```
 
 The adapter was not an attempt to make OrbitFabric become cFS. Nor was it a proposal that EDS alone could generate an operating spacecraft.
 
@@ -65,15 +65,15 @@ These questions were motivated by integration design, not by publication. The la
 
 The first failed assumption was remarkably small.
 
-At the semantic level, \`payload.enabled\` was a boolean. The original target realization used \`BASE_TYPES/StatusBit\`, a one-bit field. In the abstract, that is not an unreasonable representation of a boolean.
+At the semantic level, `payload.enabled` was a boolean. The original target realization used `BASE_TYPES/StatusBit`, a one-bit field. In the abstract, that is not an unreasonable representation of a boolean.
 
 It was not valid for the particular native path we had asked it to traverse.
 
-The first B10 run got as far as EdsLib's DDS/IDL writer, then failed at \`86-write_dds_idl.lua:87\`. The relevant check required the emitted field count and bit width to resolve to whole bytes:
+The first B10 run got as far as EdsLib's DDS/IDL writer, then failed at `86-write_dds_idl.lua:87`. The relevant check required the emitted field count and bit width to resolve to whole bytes:
 
-\`\`\`text
+```text
 (attribs.bitsize * count) % 8 == 0
-\`\`\`
+```
 
 The [retained original native log excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-original-failure.log) shows the assertion and failed build step in [run 33968752308](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308).
 
@@ -85,11 +85,11 @@ Changing the Core field to an integer would make a byte-aligned downstream type 
 
 The correction was adapter-local. Keep the semantic boolean, and generate an EDS boolean with explicit byte storage:
 
-\`\`\`xml
+```xml
 <BooleanDataType name="Boolean8">
   <BooleanDataEncoding sizeInBits="8" />
 </BooleanDataType>
-\`\`\`
+```
 
 The resulting [public EDS fixture](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/tests/fixtures/p0_b6/expected.xml) still contains a boolean type, rather than an integer field disguised as one. The revised native generation completed, and a separate invalid-reference control still failed when it was supposed to.
 
@@ -105,11 +105,11 @@ After native generation, the next proof was designed to prevent another plausibl
 
 It would have been easy to show that the adapter emitted EDS, point to the generated files, and call the integration successful. But a useful flight-software integration claim needs a consumer that actually depends on those interfaces.
 
-The small \`of_demo_app\` served that purpose.
+The small `of_demo_app` served that purpose.
 
-Its source includes \`of_demo_eds_dictionary.h\`, \`of_demo_eds_dispatcher.h\` and \`of_demo_eds_typedefs.h\`. The application registers typed handlers, subscribes to its command message ID and initializes the status telemetry message using the selected native allocation.
+Its source includes `of_demo_eds_dictionary.h`, `of_demo_eds_dispatcher.h` and `of_demo_eds_typedefs.h`. The application registers typed handlers, subscribes to its command message ID and initializes the status telemetry message using the selected native allocation.
 
-It is intentionally narrow. \`PayloadEnableCmd\` sets a flag and transmits telemetry. \`PayloadSetPeriodCmd\` records a period. It is not a flight application generator, a mission controller or a hidden mock of EdsLib.
+It is intentionally narrow. `PayloadEnableCmd` sets a flag and transmits telemetry. `PayloadSetPeriodCmd` records a period. It is not a flight application generator, a mission controller or a hidden mock of EdsLib.
 
 The dependency was also tested negatively: remove the required generated EDS materialization and the native application must not continue to build as though nothing changed.
 
@@ -121,19 +121,19 @@ It still did not establish that a command could make a valid round trip.
 
 The first runtime loop provided the next answer.
 
-The host used the native EDS-aware command path. \`ci_lab\` received the command. Generated dispatch reached \`OF_DEMO_APP_PayloadEnableCmd\`. The handler attempted to transmit \`PayloadStatusTlm\`.
+The host used the native EDS-aware command path. `ci_lab` received the command. Generated dispatch reached `OF_DEMO_APP_PayloadEnableCmd`. The handler attempted to transmit `PayloadStatusTlm`.
 
 The selected mission's telemetry topic was wrong. The [original native runtime excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) preserves the initial topic-to-MID mapping and the actual Software Bus rejection, rather than relying only on the corrected green run.
 
-The initial reference binding used status telemetry TopicId \`161\`. In that particular SampleMission allocation, the value fell into the command-side range and mapped to \`MsgId 0x00000000\` for the telemetry conversion. The Software Bus rejected the result.
+The initial reference binding used status telemetry TopicId `161`. In that particular SampleMission allocation, the value fell into the command-side range and mapped to `MsgId 0x00000000` for the telemetry conversion. The Software Bus rejected the result.
 
 The command was not missing. The telemetry type was not missing. The target had a concrete identifier allocation that the integration had failed to respect.
 
-The immediate diagnostic correction changed the selected mission's telemetry TopicId from \`161\` to \`416\`. In that native mission, \`416\` mapped to telemetry MID \`0x0897\`. The command-side topic \`160\` mapped to command MID \`0x1897\`.
+The immediate diagnostic correction changed the selected mission's telemetry TopicId from `161` to `416`. In that native mission, `416` mapped to telemetry MID `0x0897`. The command-side topic `160` mapped to command MID `0x1897`.
 
 The corrected test did what the generated EDS and a native cFS application were supposed to make possible:
 
-\`\`\`text
+```text
 EDS cmd_send
     -> ci_lab
     -> generated OF_DEMO command dispatch
@@ -142,27 +142,27 @@ EDS cmd_send
     -> to_lab
     -> EDS tlm_recv
     -> PayloadEnabled = true
-\`\`\`
+```
 
-In [run 34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957), the host decoder observed \`PayloadEnabled=true\`. The [retained native excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-native-closed-loop.log) records runtime dispatch and decoded telemetry. That was a real positive loop for the exercised pinned application and host path.
+In [run 34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957), the host decoder observed `PayloadEnabled=true`. The [retained native excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-native-closed-loop.log) records runtime dispatch and decoded telemetry. That was a real positive loop for the exercised pinned application and host path.
 
 ![Historical invalid telemetry topic mapping, the corrected native loop, and the final mission-owned symbolic topic reference.](images/03-topic-allocation.svg)
 
-But simply promoting \`416\` to a reusable default would have institutionalized the wrong solution.
+But simply promoting `416` to a reusable default would have institutionalized the wrong solution.
 
-The adapter did not own every future cFS mission's topic namespace. A number valid in SampleMission is not a universal property of \`PayloadStatusTlm\`.
+The adapter did not own every future cFS mission's topic namespace. A number valid in SampleMission is not a universal property of `PayloadStatusTlm`.
 
 The later correction was therefore architectural, not merely numeric.
 
 The public Projection Profile came to bind the interface using a symbolic mission-owned reference:
 
-\`\`\`text
+```text
 CFE_MISSION/OF_DEMO_STATUS_TLM_TOPICID
-\`\`\`
+```
 
 The selected cFS mission supplies the concrete number. MissionLib and cFE resolve the mapping for that mission. The adapter preserves the binding and fails closed if the required symbol cannot be resolved.
 
-The historical \`161 -> 416\` change restored the experiment. The final \`topic_ref\` contract established who gets to make that decision in the future.
+The historical `161 -> 416` change restored the experiment. The final `topic_ref` contract established who gets to make that decision in the future.
 
 This is the sort of distinction that rarely appears in a release announcement but often decides whether an integration remains maintainable.
 
@@ -172,30 +172,30 @@ The positive P2 loop created a new question.
 
 Could we assume that a structurally valid command with an unknown Function Code would be rejected before reaching a valid application handler?
 
-The EDS package declared two known OF_DEMO command derivatives. \`FC 0\` selected \`payload.enable\`; \`FC 1\` selected \`payload.set_period\`.
+The EDS package declared two known OF_DEMO command derivatives. `FC 0` selected `payload.enable`; `FC 1` selected `payload.set_period`.
 
-The negative test used Function Code \`127\`.
+The negative test used Function Code `127`.
 
-There was no corresponding command in the EDS declaration, so the test did not ask the EDS host encoder to invent one. It used the pinned host tool's **PassThrough** mode to create a valid CCSDS/cFS command header with an undefined selector and sent it through the normal \`ci_lab\` ingress path.
+There was no corresponding command in the EDS declaration, so the test did not ask the EDS host encoder to invent one. It used the pinned host tool's **PassThrough** mode to create a valid CCSDS/cFS command header with an undefined selector and sent it through the normal `ci_lab` ingress path.
 
 The observed packet bytes for that test were:
 
-\`\`\`text
+```text
 18 97 c0 00 00 01 7f ce
-\`\`\`
+```
 
-In the frozen native run, the command arrived at the generated OF_DEMO typed dispatch and invoked \`payload.enable\`.
+In the frozen native run, the command arrived at the generated OF_DEMO typed dispatch and invoked `payload.enable`.
 
 Not an unknown-command diagnostic. Not a safe drop observed at ingress. A valid handler.
 
 The [P3 raw excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) retains the machine classification:
 
-\`\`\`text
+```text
 unknown_function_code=127
 host_encoder=PassThrough
 classification=VALID_TYPED_HANDLER_INVOKED
 valid_handler=payload.enable
-\`\`\`
+```
 
 It would be easy to turn that into an alarming statement about NASA flight software. The evidence does not justify doing so.
 
@@ -209,10 +209,10 @@ A separate, disposable control was used to test the causal explanation. It disti
 
 With that evidence-only intervention:
 
-- \`FC 0\` still dispatched to \`payload.enable\`.
-- \`FC 1\` still dispatched to \`payload.set_period\`.
-- \`FC 127\` was rejected at generated OF_DEMO dispatch.
-- A genuinely non-derived \`SAMPLE_APP/SEND_HK\` command still used its valid position-zero path.
+- `FC 0` still dispatched to `payload.enable`.
+- `FC 1` still dispatched to `payload.set_period`.
+- `FC 127` was rejected at generated OF_DEMO dispatch.
+- A genuinely non-derived `SAMPLE_APP/SEND_HK` command still used its valid position-zero path.
 
 That last control matters. A blanket ban on position zero might have "fixed" the one negative test while breaking an entirely valid command family.
 
@@ -228,16 +228,16 @@ It was **not** PASS as automatic unknown-Function-Code rejection.
 
 This distinction is encoded directly in the public [P3 acceptance script](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/.github/scripts/p3-acceptance.sh):
 
-\`\`\`text
+```text
 acceptance_semantics=CHARACTERIZATION
 prospective_automatic_rejection_property=FALSIFIED
 automatic_unknown_fc_rejection_claim=false
 adapter_runtime_guard_added=false
-\`\`\`
+```
 
 The [promoted proof workflow](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) and [retained log selection](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) preserve both the uncomfortable observation and the accepted disposition.
 
-There is one useful parallel in P2-B. The EDS type represented \`PeriodMs\` with \`ValidRange 100..60000\`. Yet the pinned host encoding and generated dispatch still delivered out-of-range values \`99\` and \`60001\` to the typed application handler. Representation of a constraint was observable; automatic enforcement by that path was not. The adapter therefore claimed faithful projection, not enforcement it had not proven.
+There is one useful parallel in P2-B. The EDS type represented `PeriodMs` with `ValidRange 100..60000`. Yet the pinned host encoding and generated dispatch still delivered out-of-range values `99` and `60001` to the typed application handler. Representation of a constraint was observable; automatic enforcement by that path was not. The adapter therefore claimed faithful projection, not enforcement it had not proven.
 
 A native system can accurately preserve a declaration and still implement a different runtime policy than its integrator expected.
 
@@ -249,7 +249,7 @@ The original work produced more than a generated XML file, and considerably less
 | --- | --- | --- |
 | **P0/B10** | Generated EDS materialized in pinned EdsLib after the Boolean8 correction; negative reference control rejected | Pinned byte-aligned DDS/IDL path, not all EDS targets |
 | **P1** | Fixed cFS application compiled and consumed generated types and dispatcher | Dependency and build proof, not runtime behavior |
-| **P2-A** | Generated command reached the typed handler and status returned as EDS-decoded \`PayloadEnabled=true\` | Selected SampleMission/OF_DEMO host/runtime path |
+| **P2-A** | Generated command reached the typed handler and status returned as EDS-decoded `PayloadEnabled=true` | Selected SampleMission/OF_DEMO host/runtime path |
 | **P2-B** | Range constraints projected faithfully; invalid values reached the native handler | Automatic range enforcement not established |
 | **P3** | Undefined FC127 invoked a typed handler; causal controls explained the position-zero behavior | Characterization accepted, automatic rejection falsified |
 
@@ -257,7 +257,7 @@ The exact public product record is the [EDS-cFS Integration Coverage](https://gi
 
 The native testing was performed on a pinned, software-based cFS environment. It is not evidence of execution on physical spacecraft hardware, complete EDS coverage or safety certification.
 
-There is also a versioning distinction worth preserving. The integration's accepted native P0-P3 history belongs to the first public product release, \`v0.1.0\`, published on September 7, 2026. The current public [\`v0.1.1\` release](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/releases/tag/v0.1.1), dated September 25, normalized repository ownership and source coordinates without changing the relevant projection behavior. Historical run identifiers remain attached to their original baseline.
+There is also a versioning distinction worth preserving. The integration's accepted native P0-P3 history belongs to the first public product release, `v0.1.0`, published on September 7, 2026. The current public [`v0.1.1` release](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/releases/tag/v0.1.1), dated September 25, normalized repository ownership and source coordinates without changing the relevant projection behavior. Historical run identifiers remain attached to their original baseline.
 
 ## The useful result was an ownership map
 
