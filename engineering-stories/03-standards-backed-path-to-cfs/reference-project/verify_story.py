@@ -83,6 +83,23 @@ def check() -> None:
             assert (DOC / "images" / filename).is_file()
         assert "\u2014" not in text, f"long dash in R3 narrative: {file}"
 
+    r3_markdown = (
+        DOC / "index.md",
+        DOC / "technical-deep-dive.md",
+        PKG / "README.md",
+        PKG / "reference-project" / "README.md",
+    )
+    for page in r3_markdown:
+        markdown = page.read_text(encoding="utf-8")
+        assert (chr(92) + chr(96)) not in markdown, f"escaped backtick in {page}"
+        code_fences = re.findall(r"(?m)^" + chr(96) * 3, markdown)
+        assert len(code_fences) % 2 == 0, f"unbalanced fenced blocks: {page}"
+
+    telemetry_svg = ET.parse(DOC / "images/03-topic-allocation.svg").getroot()
+    visible_labels = [node.text for node in telemetry_svg.iter() if node.tag.endswith("text")]
+    assert "Corrected selected-mission binding" not in visible_labels, "unwrapped SVG label"
+    assert "Corrected selected-mission" in visible_labels, "first wrapped title line missing"
+    assert "binding" in visible_labels, "second wrapped title line missing"
     assert (PKG / "reference-project" / "README.md").is_file()
     assert (PKG / "evidence" / "README.md").is_file()
     assert (PKG / "evidence" / "NATIVE-ARTIFACTS.md").is_file()
