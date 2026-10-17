@@ -51,6 +51,11 @@ By opening this PR, I confirm that this contribution does not include proprietar
 
 - [ ] Confirmed
 
+## Public Artifact Hygiene
+
+- [ ] No prepublication working documents, social post drafts, editorial approvals, release-gate notes or temporary publication checklists are committed.
+- [ ] New Engineering Story files serve readers, source inspection or reproducibility; technical limitations and original evidence are retained.
+
 ## Validation
 
 Select the checks that were run as relevant.
