@@ -94,7 +94,7 @@ def check() -> None:
         assert (chr(92) + chr(96)) not in markdown, f"escaped backtick in {page}"
         r3_repo_root = "https://github.com/OrbitFabric/orbitfabric-reference-mission/"
         for link_kind in ("blob", "tree"):
-            unsafe = r3_repo_root + f"{link_kind}/main/engineering-stories/03-standards-backed-path-to-cfs/"
+            unsafe = r3_repo_root + f"{link_kind}/main/engineering-stories/03-standards-backed-path-to-cfs"
             assert unsafe not in markdown, f"R3 evidence link points to unmerged main: {page}"
 
         code_fences = re.findall(r"(?m)^" + chr(96) * 3, markdown)
