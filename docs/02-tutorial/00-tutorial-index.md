@@ -180,7 +180,7 @@ The figures are selected and cropped for editorial clarity rather than requiring
 
 ## Review checklist
 
-Before publishing, review the current content against these questions:
+When revising the published tutorial, review its content against these questions:
 
 - Does each construction step introduce one clear operational concept?
 - Does each step remain grounded in real files under `mission/` or `scenarios/`?
