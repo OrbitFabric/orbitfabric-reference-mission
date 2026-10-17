@@ -115,6 +115,23 @@ def check() -> None:
     assert "prospective_automatic_rejection_property=FALSIFIED" in index
     assert "[Technical Deep Dive](technical-deep-dive.md)" in index
     assert "[EdsLib upstream question](https://github.com/nasa/EdsLib/issues/120)" in index
+    assert "So I opened [NASA EdsLib issue #120]" in index
+    assert "intended dispatch semantics" in index
+    technical = (DOC / "technical-deep-dive.md").read_text(encoding="utf-8")
+    assert "## 6. Source-level dispatch trace" in technical
+    for required in (
+        "CFE_EDSMSG_Dispatch_CheckActualBufferType()",
+        "EdsLib_DataTypeDB_IdentifyBufferWithSize()",
+        "EDSLIB_NO_MATCHING_VALUE",
+        "EdsLib_DataTypeDB_GetDerivedInfo()",
+        "NumDerivatives",
+        "CFE_STATUS_UNKNOWN_MSG_ID",
+        "https://github.com/nasa/EdsLib/issues/120",
+    ):
+        assert required in technical, f"missing dispatcher source analysis: {required}"
+    assert "images/03-topic-allocation.svg" not in technical, "duplicate topic figure in Deep Dive"
+    assert "images/05-authority-matrix.svg" not in technical, "duplicate ownership figure in Deep Dive"
+    assert "images/04-unknown-fc-dispatch.svg" in technical, "missing P3 context figure"
     print("R3 source evidence, SHA-256, XML figures and narrative guards: PASS")
 
 if __name__ == "__main__":
