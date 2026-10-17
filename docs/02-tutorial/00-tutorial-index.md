@@ -116,24 +116,20 @@ Studio is intentionally last.
 
 It is a consumer and renderer of Core-owned mission facts, not the place where Mission Data Contract semantics are invented.
 
-## Current Core alignment
+## Core compatibility milestones
 
-The tutorial must distinguish three compatibility layers:
+This tutorial distinguishes when relevant Core surfaces entered the product, rather than treating an older development checkpoint as the present Core release:
 
 ```text
-v1.0.0 stable Mission Data Contract baseline
-v1.1.0 published candidate integration surfaces
-current post-v1.1 Core development
+v1.0.0  stable Mission Data Contract
+v1.1.0  candidate dashboard / scenario-run / coverage surfaces
+v1.2.0  stable Mission Snapshot and coherent Core Integration Input Set
+         seven additive stable-compatible FDIR relationship families
 ```
 
-The post-v1.1 development relevant to this Reference Mission includes:
+The Mission Snapshot format identifier remains `0.1-candidate` by design; that identifier does not reverse its stable v1.2.0 classification. See the [Core v1.2 stability decision](https://github.com/OrbitFabric/orbitfabric/blob/main/docs/reference/v1.2-integration-input-stability-decision.md).
 
-- candidate `mission_snapshot.json`;
-- seven additive explicit FDIR Relationship Manifest families.
-
-These additions are especially important to Studio Preview 1, which consumes Mission Snapshot, Entity Index, Relationship Manifest and lint JSON.
-
-They must not be described as if they had been part of the original v1.0 or v1.1 release scope.
+These surfaces are important to Studio Preview 1, which consumes Mission Snapshot, Entity Index, Relationship Manifest and lint JSON. They must not be retroactively attributed to the v1.0 or v1.1 release scope. The current Core release is documented in [Core Architecture](https://github.com/OrbitFabric/orbitfabric/blob/main/docs/ARCHITECTURE.md).
 
 ## Editorial review status
 
@@ -214,6 +210,6 @@ What is deliberately out of scope?
 
 ## Current rule
 
-The tutorial is now structurally and editorially complete through Studio Preview 1.
+The tutorial is published through Studio Preview 1 and remains structurally complete for that documented baseline.
 
-Remaining work before publication is validation and repository-publication hygiene rather than speculative new tutorial scope.
+Future changes should revalidate links, Core surface classifications, exact example baselines and any newly published Studio behavior without expanding the tutorial speculatively.
