@@ -114,7 +114,12 @@ def check() -> None:
     assert "acceptance_semantics=CHARACTERIZATION" in index
     assert "prospective_automatic_rejection_property=FALSIFIED" in index
     assert "[Technical Deep Dive](technical-deep-dive.md)" in index
-    assert "[EdsLib upstream question](https://github.com/nasa/EdsLib/issues/120)" in index
+    assert index.index("[Technical Deep Dive](technical-deep-dive.md)") < index.index("[Native Proof Sources & Evidence]"), "Deep Dive should be first footer link"
+    assert "[EdsLib Upstream Question #120](https://github.com/nasa/EdsLib/issues/120)" in index
+    launch_post = (PKG / "publication" / "linkedin-post.md").read_text(encoding="utf-8")
+    assert "I've published so far" in launch_post, "social copy must describe published stories"
+    assert "native toolchain and runtime path" in launch_post, "social copy overgeneralizes runtime execution"
+    assert "I've written so far" not in launch_post, "obsolete wording in social copy"
     assert "So I opened [NASA EdsLib issue #120]" in index
     assert "intended dispatch semantics" in index
     technical = (DOC / "technical-deep-dive.md").read_text(encoding="utf-8")
