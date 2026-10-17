@@ -11,7 +11,8 @@ The readable narrative and Technical Deep Dive are owned by the MkDocs \`docs/en
 - [Engineering Story](../../docs/engineering-stories/r3-eds-cfs/index.md)
 - [Technical Deep Dive](../../docs/engineering-stories/r3-eds-cfs/technical-deep-dive.md)
 - [Reference Project and source pins](reference-project/README.md)
-- [Retained evidence with SHA-256 manifest](evidence/README.md)
+- [Retained original job-log excerpts](evidence/README.md)
+- [Digest-verified native acceptance outputs](evidence/NATIVE-ARTIFACTS.md)
 
 ## What this package proves
 
