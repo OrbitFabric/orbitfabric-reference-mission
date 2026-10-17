@@ -1,0 +1,33 @@
+# Verbatim selected GitHub Actions job-log excerpts
+# Original repository: OrbitFabric/orbitfabric-eds-cfs-adapter
+# Run: https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33980808658
+# Job ID: 101345558752
+# Artifact ID: 9973701282; archive content not reproduced here
+# Purpose: small, contextual raw excerpts, not a complete log or a new native run.
+# Line numbers below refer to 1-based position in the original fetched job log.
+
+# Extract: source log lines 989-998
+2026-09-05T17:24:25.7119316Z EDS: Compiling src/samplemission_eds_sb_global_impl.c for host
+2026-09-05T17:24:25.7416748Z EDS: Archiving obj/samplemission_eds_sb_dispatchdb.a for host
+2026-09-05T17:24:25.7426207Z EDS: Linking shared object obj/samplemission_eds_sb_dispatchdb.so for host
+2026-09-05T17:24:25.7471490Z EDS: Linking relocatable object obj/samplemission_eds_sb_dispatchdb.obj for host
+2026-09-05T17:24:26.1494692Z SEDS tool complete -- 0 error(s) and 0 warning(s)
+2026-09-05T17:24:26.1562377Z All host side global EDS objects built
+2026-09-05T17:24:26.1588764Z Built target edstool-execute
+2026-09-05T17:24:26.1682820Z 3586e1bbec5d13cff10e6310a71771e8f2b10ba1e084c681a7083ebc43e02a4e /home/runner/work/_temp/orbitfabric-cfs-b10/sample_defs/eds/orbitfabric-mission.xml
+2026-09-05T17:24:26.1741135Z Executing native invalid-reference control
+2026-09-05T17:24:26.2018771Z       <ContainerDataType name="CommandBase" baseType="CFE_HDR/OrbitFabricMissingHeader" />
+
+# Extract: source log lines 1004-1015
+2026-09-05T17:24:26.6041270Z /home/runner/work/_temp/orbitfabric-cfs-b10/sample_defs/eds/orbitfabric-mission.xml:8:error: attribute 'basetype' could not be resolved - CFE_HDR/OrbitFabricMissingHeader
+2026-09-05T17:24:26.6042923Z Processing Error - stack traceback:
+2026-09-05T17:24:26.6047328Z 	...-cfs-b10/tools/eds/tool/scripts/10-seds_resolve_refs.lua:488: in main chunk
+2026-09-05T17:24:26.8293207Z Aborted (core dumped)
+2026-09-05T17:24:26.8294427Z gmake[4]: *** [/home/runner/work/_temp/orbitfabric-cfs-b10/tools/eds/tool/cmake/edstool-execute-all.mk:58: obj/edstool-execute-SampleMission.stamp] Error 134
+2026-09-05T17:24:26.8295935Z gmake[3]: *** [CMakeFiles/edstool-execute.dir/build.make:72: CMakeFiles/edstool-execute] Error 2
+2026-09-05T17:24:26.8296893Z gmake[2]: *** [CMakeFiles/Makefile2:1081: CMakeFiles/edstool-execute.dir/all] Error 2
+2026-09-05T17:24:26.8297754Z gmake[1]: *** [CMakeFiles/Makefile2:1088: CMakeFiles/edstool-execute.dir/rule] Error 2
+2026-09-05T17:24:26.8298484Z gmake: *** [Makefile:283: edstool-execute] Error 2
+2026-09-05T17:24:26.8536243Z 3586e1bbec5d13cff10e6310a71771e8f2b10ba1e084c681a7083ebc43e02a4e /home/runner/work/orbitfabric-eds-cfs-adapter/orbitfabric-eds-cfs-adapter/tests/fixtures/p0_b6/expected.xml
+2026-09-05T17:24:26.8567841Z 002f73792ac03e3b10faf9a73c593e904fb140245d5b0414bd07ae3c1f1e7517 /home/runner/work/orbitfabric-eds-cfs-adapter/orbitfabric-eds-cfs-adapter/tests/fixtures/p0_b8/expected.json
+2026-09-05T17:24:26.8570655Z B10 native EdsLib validation harness completed
