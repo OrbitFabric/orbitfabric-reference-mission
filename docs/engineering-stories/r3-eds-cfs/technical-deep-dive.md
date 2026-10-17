@@ -56,7 +56,7 @@ The assertion checked a whole-byte multiple at the field writer boundary:
 assert((attribs.bitsize * count) % 8 == 0)
 ```
 
-The [first B10 log excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-original-failure.log) is from [run 33968752308](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308). It contains the writer assertion and failing make target. It does not by itself preserve the original `StatusBit` XML. The original representation and its root-cause attribution are historical engineering facts established during the native investigation, not text extracted from the job-log excerpt.
+The [first B10 log excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-original-failure.log) is from [run 33968752308](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308). It contains the writer assertion and failing make target. It does not by itself preserve the original `StatusBit` XML. The original representation and its root-cause attribution are historical engineering facts established during the native investigation, not text extracted from the job-log excerpt.
 
 ### Bounded correction and controls
 
@@ -70,7 +70,7 @@ The adapter-local correction defined:
 
 The relevant field continues to use a boolean rather than being recast as a generic integer. The source Core contract and Projection Profile do not acquire a `bool`-width configuration rule.
 
-B10 had to pass its real generation and still reject invalid input. [Run 33980808658](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33980808658) records generation completion and a deliberate unresolved-reference negative control. The [curated excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-corrected-proof.log) preserves both. The [native B10 script](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/.github/scripts/b10-native-edslib.sh) is the reproducible operation boundary.
+B10 had to pass its real generation and still reject invalid input. [Run 33980808658](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33980808658) records generation completion and a deliberate unresolved-reference negative control. The [curated excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-corrected-proof.log) preserves both. The [native B10 script](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/.github/scripts/b10-native-edslib.sh) is the reproducible operation boundary.
 
 This proves the exercised byte-aligned writer accepts the corrected EDS type, not a universal rule about all one-bit EDS types.
 
@@ -95,7 +95,7 @@ The first P2 issue was a **mission mapping mismatch**:
 | Corrected SampleMission status telemetry | 416 | `0x0897` | Transmitted and EDS-decoded |
 | Command path in selected SampleMission | 160 | `0x1897` | Native command dispatch works |
 
-These are values of the **selected sample mission**, not a reusable OrbitFabric allocation table. The [original failed P2 runtime source](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) is retained from a digest-verified Actions archive. The [corrected native acceptance record](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-a-acceptance.txt) is separately retained.
+These are values of the **selected sample mission**, not a reusable OrbitFabric allocation table. The [original failed P2 runtime source](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) is retained from a digest-verified Actions archive. The [corrected native acceptance record](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-a-acceptance.txt) is separately retained.
 
 ![Comparison of incorrect status mapping, working native allocation, and symbolic ownership.](images/03-topic-allocation.svg)
 
@@ -120,7 +120,7 @@ host cmd_send with EDS-selected command
  -> PayloadEnabled=true
 ```
 
-The original host/runtime result is [run 34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957), with its [selected output retained here](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-native-closed-loop.log).
+The original host/runtime result is [run 34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957), with its [selected output retained here](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-native-closed-loop.log).
 
 ### P2-B: representation is not runtime range checking
 
@@ -152,7 +152,7 @@ classification=VALID_TYPED_HANDLER_INVOKED
 valid_handler=payload.enable
 ```
 
-The [source run](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) and [retained job-log selection](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) preserve that outcome.
+The [source run](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) and [retained job-log selection](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) preserve that outcome.
 
 ### Causal control, not production patch
 
@@ -184,7 +184,7 @@ An upstream intended-semantics question is tracked in [NASA EdsLib issue #120](h
 
 ## 6. Retained evidence and integrity
 
-The [retained R3 evidence index](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/README.md) provides:
+The [retained R3 evidence index](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/README.md) provides:
 
 - original workflow links and job IDs;
 - 1-based source-log line ranges;
@@ -199,7 +199,7 @@ Inspect the actual generated EDS fixture and application source when evaluating 
 
 ## 7. Bounded reproduction entrypoint
 
-The [Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/03-standards-backed-path-to-cfs/reference-project) indexes the exact proof scripts, pins, source inputs and expected observations. The native project is owned by the adapter repository; R3 does not fork `of_demo_app` or maintain a second EDS implementation.
+The [Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/reference-project) indexes the exact proof scripts, pins, source inputs and expected observations. The native project is owned by the adapter repository; R3 does not fork `of_demo_app` or maintain a second EDS implementation.
 
 A person attempting to reproduce the historical lane should:
 
