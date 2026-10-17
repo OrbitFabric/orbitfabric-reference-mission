@@ -111,9 +111,9 @@ For the currently published Core version, consult [Core Architecture](https://gi
 
 The Studio section targets **OrbitFabric Studio 0.15.0 Preview 1** and documents only implemented behavior.
 
-## Studio publication set
+## Studio views illustrated
 
-The final tutorial block uses five real Studio captures from this Reference Mission:
+The Studio tutorial illustrates five implemented views using real captures from this Reference Mission:
 
 ```text
 Mission Atlas
@@ -123,7 +123,7 @@ Operational State Map
 Mode Focus for PAYLOAD_ACTIVE
 ```
 
-The figures are selected and cropped for editorial clarity while remaining faithful to the real Studio surface and Core-owned mission facts.
+These views illustrate the actual Studio Preview 1 surface and its Core-owned mission facts.
 
 ---
 
