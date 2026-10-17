@@ -167,9 +167,3 @@ progressive Mission Data Contract tutorial
 That combination is deliberate.
 
 It allows the same sanitized mission to demonstrate both the semantic contract layer and the downstream human-inspection layer without duplicating mission meaning.
-
-## Editorial boundary
-
-Do not use this overview as the tutorial sequence.
-
-Use it as the current-state reference when writing or validating the progressive tutorial under `docs/02-tutorial/`.
