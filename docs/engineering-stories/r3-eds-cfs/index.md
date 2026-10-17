@@ -3,9 +3,12 @@ title: One Bit, Zero Telemetry, and an Unknown Command That Ran
 description: A real EDS-to-cFS integration journey. Three native observations revealed different ownership boundaries, from boolean storage to telemetry allocation and command dispatch.
 story_social_title: One Bit, Zero Telemetry, and an Unknown Command That Ran
 story_social_description: A source-backed engineering story of CCSDS EDS, NASA EdsLib and cFS, and three assumptions tested against native execution.
+story_social_image: engineering-stories/r3-eds-cfs/images/r3-cover.jpg
 ---
 
 # One Bit, Zero Telemetry, and an Unknown Command That Ran
+
+![OrbitFabric R3 cover: a mission architecture crosses into the native runtime, where one bit, disappearing telemetry and an unexpected command route expose real system behavior.](images/r3-cover.jpg)
 
 *An Engineering Journey Through CCSDS EDS, EdsLib, and NASA cFS*
 
