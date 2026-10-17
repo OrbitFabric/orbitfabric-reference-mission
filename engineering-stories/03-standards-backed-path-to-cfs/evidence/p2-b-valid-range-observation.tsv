@@ -1,0 +1,4 @@
+value	host_exit	host_encode	sent	generated_dispatch	typed_handler	received_value
+1000	0	accepted	yes	accepted	yes	1000
+99	0	accepted	yes	accepted	yes	99
+60001	0	accepted	yes	accepted	yes	60001
