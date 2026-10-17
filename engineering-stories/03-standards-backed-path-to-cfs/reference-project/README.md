@@ -20,7 +20,7 @@ Pinned NASA references are recorded in the [Technical Deep Dive](../../../docs/e
 
 Run the scripts from the checked-out adapter repository root in an environment satisfying their prerequisites, not from this directory:
 
-\`\`\`bash
+```bash
 # A historical-equivalent adapter tag/commit should be selected first.
 # No script is executed by this Story package.
 
@@ -28,9 +28,9 @@ bash .github/scripts/b10-native-edslib.sh
 bash .github/scripts/p1-native-eds-build.sh
 bash .github/scripts/p2-runtime-proof.sh
 bash .github/scripts/p3-conformance-proof.sh
-\`\`\`
+```
 
-Each script may clone/build pinned NASA components, requires Linux-native dependencies, and writes into disposable job/workspace directories. The P3 script intentionally returns a nonzero exit code for the raw negative probe. The full GitHub Actions workflow has separate follow-on steps for NASA control, disposable EdsLib causal control, postmortem and final characterization acceptance. Running only \`p3-conformance-proof.sh\` must not be misrepresented as a complete green P3 acceptance.
+Each script may clone/build pinned NASA components, requires Linux-native dependencies, and writes into disposable job/workspace directories. The P3 script intentionally returns a nonzero exit code for the raw negative probe. The full GitHub Actions workflow has separate follow-on steps for NASA control, disposable EdsLib causal control, postmortem and final characterization acceptance. Running only `p3-conformance-proof.sh` must not be misrepresented as a complete green P3 acceptance.
 
 Inspect [the actual P3 workflow](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/.github/workflows/p3-conformance-proof.yml) for the complete ordered CI sequence before attempting a fresh reproduction.
 
@@ -40,21 +40,21 @@ Inspect [the actual P3 workflow](https://github.com/OrbitFabric/orbitfabric-eds-
 | --- | --- | --- |
 | First B10 | [33968752308](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308) | Failure at DDS/IDL writer; not a passing native proof |
 | Corrected B10 | [33980808658](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33980808658) | Successful generation plus deliberately rejected invalid reference |
-| P2 runtime | [34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957) | Generated command and EDS-decoded \`PayloadEnabled=true\` |
-| P3 characterization | [34049249662](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) | Raw FC127 handler invocation, separate causal control, final \`CHARACTERIZATION\` PASS |
+| P2 runtime | [34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957) | Generated command and EDS-decoded `PayloadEnabled=true` |
+| P3 characterization | [34049249662](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) | Raw FC127 handler invocation, separate causal control, final `CHARACTERIZATION` PASS |
 
 See the [durable selected log excerpts](../evidence/README.md) and exact SHA-256 values for on-repository preservation.
 
 ## Native-gate distinctions
 
-\`\`\`text
+```text
 P0  Project EDS; exercise native type generation and negative controls
 P1  Build a fixed cFS consumer with generated EDS dependencies
 P2  Observe typed command dispatch, telemetry and represented range constraints
 P3  Observe undefined derived selector, test controls, accept characterization
-\`\`\`
+```
 
-This package deliberately does not copy \`of_demo_app\`, EdsLib, cFS source, generated EDS internals, or private project artifacts. A successful Story page build is not a substitute for native proof execution.
+This package deliberately does not copy `of_demo_app`, EdsLib, cFS source, generated EDS internals, or private project artifacts. A successful Story page build is not a substitute for native proof execution.
 
 ## Release lineage caveat
 
