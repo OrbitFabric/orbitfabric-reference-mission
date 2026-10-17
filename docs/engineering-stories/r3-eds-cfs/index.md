@@ -297,6 +297,6 @@ The more interesting question is what survives after the native system gets to a
 
 ---
 
-**Inspect the engineering evidence:** [R3 Reference Project and provenance](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs) · [Technical Deep Dive](technical-deep-dive.md) · [EDS-cFS adapter](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter) · [EdsLib upstream question](https://github.com/nasa/EdsLib/issues/120)
+**Continue exploring:** [Technical Deep Dive](technical-deep-dive.md) · [Native Proof Sources & Evidence](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs) · [EDS-cFS Adapter](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter) · [EdsLib Upstream Question #120](https://github.com/nasa/EdsLib/issues/120)
 
 *This story reports a historical, bounded engineering investigation. No new native run or physical hardware test is implied by its publication.*
