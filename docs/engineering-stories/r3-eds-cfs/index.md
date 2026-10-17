@@ -14,59 +14,151 @@ story_social_image: engineering-stories/r3-eds-cfs/images/r3-cover.jpg
 
 The command reached its handler. The telemetry never arrived.
 
-That was not the first surprise in this integration. Earlier, a single boolean field had stopped native generation. Later, an undefined command selector would reach a perfectly valid application handler.
+And that had not even been the first surprise. Before we reached runtime execution, a single Boolean field had stopped native generation. Later, a command selector that the declared interface did not recognize would reach a perfectly valid application handler.
 
-All three observations came from a project that had started for an entirely different reason: to find out whether a mission-level semantic contract could travel through a standards-backed interface and arrive in a genuine cFS environment without either side surrendering its own responsibilities.
+Three apparently different observations had emerged from work that had begun with a very different objective: to find out whether an existing mission-level semantic contract could pass through a standards-backed interface and reach a genuine cFS environment, without either side giving up its own responsibilities.
 
-The experiment was already real before there was any intention to turn it into an Engineering Story. Its most useful findings were not the parts that behaved as expected.
+The experiment was already well under way before I thought of documenting it as an Engineering Story. Some of its most revealing results were precisely the ones I had not expected.
+
+To explain why I found them so interesting, I need to go back a little.
+
+## One contract, different systems
+
+OrbitFabric grew out of a problem I have encountered repeatedly in software and systems engineering: keeping the meaning of information consistent as it crosses different tools, components and engineering teams.
+
+A command, a telemetry measurement or a verification expectation can appear in several artifacts. Each system has perfectly good reasons to represent it differently. The trouble starts when the representation changes and the meaning quietly changes with it.
+
+With [OrbitFabric Core](https://github.com/OrbitFabric/orbitfabric), I have been exploring a model-first *Mission Data Contract*: define and validate mission semantics at a recognizable source, then make those facts available to downstream systems through explicit integration contracts.
+
+Of course, defining a contract does not mean the integration problem is solved.
+
+That is where the adapters became important.
+
+I had been developing paths toward F Prime, OpenC3 COSMOS and OpenOBSW/OpenSVF, each with different native responsibilities. Some project contract declarations for flight software; others produce ground-facing artifacts or native verification procedures.
+
+Those experiments reinforced a design principle that sounds straightforward on paper: an adapter needs to understand enough about its destination to produce something that destination can actually use, without asking the Mission Model to adopt the destination's internal architecture.
+
+In practice, the interesting questions tend to appear right at that boundary.
+
+## Why I wanted to explore a CCSDS EDS path
+
+CCSDS Electronic Data Sheets were particularly intriguing to me.
+
+EDS offered a way to explore a path where the intermediate representation was not a convention invented specifically for OrbitFabric, but a standardized description that an independent software toolchain could interpret.
+
+That opened up an appealing possibility.
+
+Start with facts already present in the mission contract. Project the supported subset into an EDS package. Then let the target's native tooling interpret and materialize that description, rather than building another private representation of the target inside OrbitFabric.
+
+That was the motivation for the [OrbitFabric EDS-cFS adapter](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter).
+
+Given a coherent Core Integration Input Set and an explicit *Projection Profile*, its job was to produce a deterministic CCSDS EDS representation, accompanied by traceability and a checkable Integration Result.
+
+But the most interesting part began immediately downstream.
+
+In the selected path, [NASA EdsLib](https://github.com/nasa/EdsLib) would process the EDS descriptions and participate in generating the types and interfaces that a [cFS](https://github.com/nasa/cFS) application could actually consume. MissionLib and cFE would retain their own responsibilities for mission-specific message identity realization and native runtime behavior.
+
+The path I wanted to investigate looked roughly like this:
+
+```text
+OrbitFabric Mission Data Contract
+          |
+          v
+Core Integration Input Set
+          |
+          v
+EDS-cFS Projection Profile
+          |
+          v
+OrbitFabric EDS-cFS Adapter
+          |
+          v
+CCSDS Electronic Data Sheets
+          |
+          v
+NASA EdsLib / MissionLib
+          |
+          v
+Generated native cFS interfaces
+          |
+          v
+cFS application and runtime
+```
 
 ![The demonstrated path from mission semantics through the EDS adapter and native EdsLib materialization into a real cFS application and a host command/telemetry loop.](images/01-standards-backed-path.svg)
 
-## First, a command that seemed to work
+At first glance, this might look like an ordinary sequence of transformations.
 
-The command was `payload.enable`.
+But each step introduces a different authority.
 
-By the time the first runtime test was assembled, the adapter had projected the selected mission definitions into an EDS package. A fixed test application, `of_demo_app`, consumed the generated native interface. Its `PayloadEnableCmd` handler set the `PayloadEnabled` telemetry field to true, then used `CFE_SB_TransmitMsg` to publish a status message.
+Core owns what the mission data means. The Profile states how we intend to bind it for a particular destination. The adapter produces that projection. The native tooling interprets the resulting artifact according to its own rules. Finally, the runtime executes code with its own architecture, configuration and operational policies.
 
-The incoming part worked. The typed handler ran.
+And that raised a question I found difficult to ignore:
 
-But the corresponding status telemetry could not be transmitted successfully.
+**How much of the original meaning really survives this chain, and which properties can we claim to have demonstrated only after the native system has had its say?**
 
-A build passing would not have exposed this. EDS generation could establish a faithful representation. A native build could establish that the generated types and interfaces were consumable. Neither could prove that the selected mission's Software Bus identifiers were valid for the intended direction.
+Take a Boolean field.
 
-We had crossed one boundary and found another.
+To Core, its meaning does not depend on how a target chooses to store it. But once it reaches a toolchain that must generate native types and layouts, sizes, alignment and materialization rules enter the picture.
 
-That became a recurring pattern. The integration did not consist of one obstacle called *cFS compatibility*. It consisted of separate ownership decisions. A type representation, a concrete topic allocation and a dispatch policy can each fail independently, even when everything immediately upstream is correct.
+Or consider a telemetry message identity.
 
-## Why a standards-backed path in the first place?
+Its definition can be entirely consistent with the source contract and the generated EDS. That still does not guarantee that the selected numeric allocation is valid for the particular cFS mission we are running.
 
-The [OrbitFabric EDS-cFS adapter](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter) was built to pressure-test a specific architectural claim: semantic mission facts can be projected into a target-owned representation without having to insert target mechanics into the semantic source.
+And what about an interface that declares which commands exist? How much does that declaration tell us about what the dispatcher will actually do when it receives an unexpected selector?
 
-The relevant chain was:
+Those are different engineering questions. None is answered simply by observing that an EDS XML file was generated successfully.
 
-```text
-mission contract
-  -> integration input facts
-  -> explicit EDS-cFS Projection Profile
-  -> deterministic CCSDS EDS package
-  -> NASA EdsLib and MissionLib materialization
-  -> generated cFS native interfaces
-  -> selected cFS application and runtime
-```
+Which was exactly why it seemed worth going further.
 
-The adapter was not an attempt to make OrbitFabric become cFS. Nor was it a proposal that EDS alone could generate an operating spacecraft.
+## From a working adapter to a native integration experiment
 
-CCSDS Electronic Data Sheets provide a structured description of data types and interfaces. In the exercised [NASA EdsLib](https://github.com/nasa/EdsLib) and [cFS](https://github.com/nasa/cFS) toolchain, those descriptions could participate in target-native code generation and runtime message handling. That made the path interesting. The target was not a convenient fake consumer; it had rules and behaviors of its own.
+The initial goal was deliberately bounded: establish that a selected portion of the OrbitFabric semantic surface could be projected into CCSDS EDS deterministically, while preserving identities, traceability and explicit ownership.
 
-The Proof of Concept progressively asked harder questions.
+That was already a useful result.
 
-Could we emit a deterministic EDS package from existing facts? Could a pinned EdsLib lane materialize it? Could a small application build against the generated declarations rather than a handwritten surrogate? Could a host send an EDS-aware command and receive typed telemetry? And once the positive case worked, what would happen when the input was outside the declared command set?
+But once I had produced a representation intended for EdsLib, stopping at the XML would have left the most important question unanswered: **could the intended native consumer actually use what we had generated?**
 
-These questions were motivated by integration design, not by publication. The later narrative follows the evidence they produced.
+So I began extending the experiment, one boundary at a time.
+
+First came materialization through a precisely pinned EdsLib toolchain. Then came the build of a small cFS application that really depended on the generated interfaces.
+
+I used `of_demo_app` for that purpose: an intentionally simple application with two typed commands and a status telemetry message.
+
+Its simplicity mattered.
+
+I was not trying to build another complex application, nor to suggest that OrbitFabric could generate an entire onboard software system. I wanted a native consumer small enough that I could follow the path end to end, but real enough that its implementation had to use what the target toolchain produced.
+
+Remove the required generated interfaces, and the application build should fail. Deliver a command, and we should be able to observe which typed handler actually ran. Have that handler emit telemetry, and the message should travel through the cFS Software Bus and return to an EDS-aware host that could decode it.
+
+By then, the experiment had become more than a check on the generated format.
+
+It was forcing me to separate proof levels that are very easy, and sometimes very convenient, to confuse.
+
+A correctly generated EDS package does not prove that EdsLib can materialize it.
+
+Successful native generation does not prove that a real application can build and operate against those interfaces.
+
+A compiling application does not prove that a command can travel correctly through the system.
+
+And a command reaching its typed handler does not yet prove that the response telemetry has a valid path back out.
+
+Each answer made the next question more precise.
+
+Only later, once the nominal command path was observable, did it make sense to challenge less obvious assumptions. What would happen with a Function Code that the interface had not declared? Which constraints expressed in EDS would the runtime actually enforce?
+
+I was not setting out to confirm answers I already knew. That was the point of using an independent toolchain, observing native behavior and keeping the uncomfortable results alongside the successful ones.
+
+The integration work had already acquired an engineering life of its own. It was only afterwards, when I looked back over the observations, that I realized the sequence might be worth telling beyond the immediate adapter work.
+
+That is how this Engineering Story came about.
+
+And, looking back, I still find it striking that the first obstacle did not arise from an elaborate interaction between components or some unpredictable runtime behavior.
+
+**It came much earlier. From a Boolean. From a single bit.**
+
 
 ## One bit: a semantic truth meets a storage rule
-
-The first failed assumption was remarkably small.
 
 At the semantic level, `payload.enabled` was a boolean. The original target realization used `BASE_TYPES/StatusBit`, a one-bit field. In the abstract, that is not an unreasonable representation of a boolean.
 
@@ -121,6 +213,8 @@ That made P1 useful. It established that the native target really consumed the p
 It still did not establish that a command could make a valid round trip.
 
 ## Zero telemetry: when the target owns the number
+
+The command was `payload.enable`. By the time the first runtime loop was assembled, the generated EDS interface was in use, and `of_demo_app` was ready to handle the command and publish its status. The incoming half worked. The telemetry half did not.
 
 The first runtime loop provided the next answer.
 
