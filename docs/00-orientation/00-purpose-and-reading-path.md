@@ -47,8 +47,6 @@ Use this order when reading or extending the documentation:
 3. `docs/03-reference-overview/`, compact view of the current validated model and ecosystem role.
 4. `docs/engineering-stories/`, reproducible investigations that take bounded mission slices into real downstream tools and external runtime boundaries.
 
-The repository previously explored a broader documentation taxonomy with separate engineering-foundation, scenario-design and Studio-driver areas. The public structure was later deliberately simplified. Those concerns now live inside the tutorial and reference overview instead of placeholder sections.
-
 ## What must remain separate
 
 The documentation must keep a strict conceptual separation between:
@@ -72,15 +70,3 @@ Studio consumes, links, organizes and renders.
 ```
 
 Studio must never be described as a second Mission Data Contract implementation or as the source of mission semantics.
-
-## Continuity rules for documentation updates
-
-Future documentation revisions should preserve these established editorial and architectural boundaries:
-
-```text
-Do not present the validated model as if it were the tutorial sequence.
-Use the validated baseline as source of truth, then reconstruct the tutorial incrementally.
-Keep model construction, scenario evidence, generated surfaces and Studio interpretation conceptually separate.
-Document only Studio behavior that exists in the current validated preview.
-Do not let Studio invent Mission Data Contract semantics.
-```
