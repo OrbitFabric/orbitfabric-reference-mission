@@ -95,7 +95,7 @@ The first P2 issue was a **mission mapping mismatch**:
 | Corrected SampleMission status telemetry | 416 | \`0x0897\` | Transmitted and EDS-decoded |
 | Command path in selected SampleMission | 160 | \`0x1897\` | Native command dispatch works |
 
-These are values of the **selected sample mission**, not a reusable OrbitFabric allocation table.
+These are values of the **selected sample mission**, not a reusable OrbitFabric allocation table. The [original failed P2 runtime source](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) is retained from a digest-verified Actions archive. The [corrected native acceptance record](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-a-acceptance.txt) is separately retained.
 
 ![Comparison of incorrect status mapping, working native allocation, and symbolic ownership.](images/03-topic-allocation.svg)
 
