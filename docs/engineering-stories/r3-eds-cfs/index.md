@@ -75,7 +75,7 @@ The first B10 run got as far as EdsLib's DDS/IDL writer, then failed at `86-writ
 (attribs.bitsize * count) % 8 == 0
 ```
 
-The [retained original native log excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-original-failure.log) shows the assertion and failed build step in [run 33968752308](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308).
+The [retained original native log excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-original-failure.log) shows the assertion and failed build step in [run 33968752308](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33968752308).
 
 This distinction is important: the observation does **not** prove that cFS, EdsLib or EDS universally prohibits one-bit fields. It proves that a standalone one-bit representation failed this pinned DDS/IDL generation boundary.
 
@@ -95,7 +95,7 @@ The resulting [public EDS fixture](https://github.com/OrbitFabric/orbitfabric-ed
 
 ![The initial one-bit target representation and the corrected eight-bit EDS boolean, preserving the mission-level semantic type.](images/02-one-bit-boolean8.svg)
 
-The distinction between a positive and a negative control matters. In [B10 run 33980808658](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33980808658), the EDS tool completed successfully; the harness then deliberately introduced an unresolved header reference and observed the expected rejection. The [selected log](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-corrected-proof.log) retains both observations.
+The distinction between a positive and a negative control matters. In [B10 run 33980808658](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/33980808658), the EDS tool completed successfully; the harness then deliberately introduced an unresolved header reference and observed the expected rejection. The [selected log](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/b10-corrected-proof.log) retains both observations.
 
 The lesson was not "store booleans as bytes everywhere". It was that a semantic contract and a wire or target representation are different authorities. The adapter could make the target-specific representation decision without changing the mission fact.
 
@@ -123,7 +123,7 @@ The first runtime loop provided the next answer.
 
 The host used the native EDS-aware command path. `ci_lab` received the command. Generated dispatch reached `OF_DEMO_APP_PayloadEnableCmd`. The handler attempted to transmit `PayloadStatusTlm`.
 
-The selected mission's telemetry topic was wrong. The [original native runtime excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) preserves the initial topic-to-MID mapping and the actual Software Bus rejection, rather than relying only on the corrected green run.
+The selected mission's telemetry topic was wrong. The [original native runtime excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-original-invalid-topic.log) preserves the initial topic-to-MID mapping and the actual Software Bus rejection, rather than relying only on the corrected green run.
 
 The initial reference binding used status telemetry TopicId `161`. In that particular SampleMission allocation, the value fell into the command-side range and mapped to `MsgId 0x00000000` for the telemetry conversion. The Software Bus rejected the result.
 
@@ -144,7 +144,7 @@ EDS cmd_send
     -> PayloadEnabled = true
 ```
 
-In [run 34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957), the host decoder observed `PayloadEnabled=true`. The [retained native excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-native-closed-loop.log) records runtime dispatch and decoded telemetry. That was a real positive loop for the exercised pinned application and host path.
+In [run 34027854957](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34027854957), the host decoder observed `PayloadEnabled=true`. The [retained native excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p2-native-closed-loop.log) records runtime dispatch and decoded telemetry. That was a real positive loop for the exercised pinned application and host path.
 
 ![Historical invalid telemetry topic mapping, the corrected native loop, and the final mission-owned symbolic topic reference.](images/03-topic-allocation.svg)
 
@@ -188,7 +188,7 @@ In the frozen native run, the command arrived at the generated OF_DEMO typed dis
 
 Not an unknown-command diagnostic. Not a safe drop observed at ingress. A valid handler.
 
-The [P3 raw excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) retains the machine classification:
+The [P3 raw excerpt](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) retains the machine classification:
 
 ```text
 unknown_function_code=127
@@ -235,7 +235,7 @@ automatic_unknown_fc_rejection_claim=false
 adapter_runtime_guard_added=false
 ```
 
-The [promoted proof workflow](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) and [retained log selection](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) preserve both the uncomfortable observation and the accepted disposition.
+The [promoted proof workflow](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/actions/runs/34049249662) and [retained log selection](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/p3-unknown-fc-characterization.log) preserve both the uncomfortable observation and the accepted disposition.
 
 There is one useful parallel in P2-B. The EDS type represented `PeriodMs` with `ValidRange 100..60000`. Yet the pinned host encoding and generated dispatch still delivered out-of-range values `99` and `60001` to the typed application handler. Representation of a constraint was observable; automatic enforcement by that path was not. The adapter therefore claimed faithful projection, not enforcement it had not proven.
 
@@ -253,7 +253,7 @@ The original work produced more than a generated XML file, and considerably less
 | **P2-B** | Range constraints projected faithfully; invalid values reached the native handler | Automatic range enforcement not established |
 | **P3** | Undefined FC127 invoked a typed handler; causal controls explained the position-zero behavior | Characterization accepted, automatic rejection falsified |
 
-The exact public product record is the [EDS-cFS Integration Coverage](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/coverage/integration-coverage.md). The [Story evidence manifest](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/main/engineering-stories/03-standards-backed-path-to-cfs/evidence/README.md) retains selected original job-log excerpts and their hashes. Its excerpts are intentionally smaller than the full original Actions artifacts and make no claim of independent replay.
+The exact public product record is the [EDS-cFS Integration Coverage](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter/blob/v0.1.1/coverage/integration-coverage.md). The [Story evidence manifest](https://github.com/OrbitFabric/orbitfabric-reference-mission/blob/4dae1391cade3d7a3be7d2bfc4f3f91106fab067/engineering-stories/03-standards-backed-path-to-cfs/evidence/README.md) retains selected original job-log excerpts and their hashes. Its excerpts are intentionally smaller than the full original Actions artifacts and make no claim of independent replay.
 
 The native testing was performed on a pinned, software-based cFS environment. It is not evidence of execution on physical spacecraft hardware, complete EDS coverage or safety certification.
 
@@ -289,6 +289,6 @@ The more interesting question is what survives after the native system gets to a
 
 ---
 
-**Inspect the engineering evidence:** [R3 Reference Project and provenance](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/03-standards-backed-path-to-cfs) · [Technical Deep Dive](technical-deep-dive.md) · [EDS-cFS adapter](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter) · [EdsLib upstream clarification](https://github.com/nasa/EdsLib/issues/120)
+**Inspect the engineering evidence:** [R3 Reference Project and provenance](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/03-standards-backed-path-to-cfs) · [Technical Deep Dive](technical-deep-dive.md) · [EDS-cFS adapter](https://github.com/OrbitFabric/orbitfabric-eds-cfs-adapter) · [EdsLib upstream question](https://github.com/nasa/EdsLib/issues/120)
 
 *This story reports a historical, bounded engineering investigation. No new native run or physical hardware test is implied by its publication.*
