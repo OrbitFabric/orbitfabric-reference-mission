@@ -136,7 +136,7 @@ a Studio session is not a source mutation
 
 After the mission opens successfully, the reader should see the mission-level Studio workspace rather than a file browser or raw JSON viewer.
 
-The published visual sequence begins in the next step with Mission Atlas. A separate application-open screenshot is intentionally omitted because it would duplicate the same mission-wide surface without adding engineering information.
+The next step begins the visual exploration with Mission Atlas, then moves from the mission-wide view to individual entities.
 
 ## What this step proves
 
