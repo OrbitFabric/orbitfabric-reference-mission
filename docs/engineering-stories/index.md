@@ -46,10 +46,12 @@ Current status:
 
 - G0 offline contract and identity proof: **accepted / closed**;
 - G1 offline PWNSAT projection lineage: **accepted / closed**;
-- bounded runtime harness: **implemented and verified offline (33/33 runtime tests at the published candidate)**;
+- bounded runtime harness: **implemented and verified offline (33/33 runtime tests at the published offline baseline)**;
 - physical FlatSat execution: **NOT RUN**, so no physical P1/P2 or accepted E1/E2 and no observed FlatSat multiplicity;
 - final runtime phase acceptance: **pending physical evidence and a separate review**;
 - publication model: **Front Story + Reference Project**; no separate Technical Deep Dive is required for the current R2 baseline.
+
+The Front Story retains a commit-pinned Reference Project link as an archival publication checkpoint. For the maintained publication status and complete offline harness documentation, use the current Reference Project link below.
 
 - [Read the R2 Front Story](r2-pwnsat/index.md)
 - [Inspect the R2 Reference Project](https://github.com/OrbitFabric/orbitfabric-reference-mission/tree/main/engineering-stories/02-one-intent-two-executions/reference-project)
