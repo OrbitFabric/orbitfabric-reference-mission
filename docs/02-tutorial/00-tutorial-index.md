@@ -131,21 +131,6 @@ The Mission Snapshot format identifier remains `0.1-candidate` by design; that i
 
 These surfaces are important to Studio Preview 1, which consumes Mission Snapshot, Entity Index, Relationship Manifest and lint JSON. They must not be retroactively attributed to the v1.0 or v1.1 release scope. The current Core release is documented in [Core Architecture](https://github.com/OrbitFabric/orbitfabric/blob/main/docs/ARCHITECTURE.md).
 
-## Editorial review status
-
-| Block | Status | Notes |
-|---|---|---|
-| Block 1, mission context | Reviewed | Operational need first, spacecraft identity second. |
-| Block 2, mission contract construction | Reviewed | Steps 03 through 12 form a consistent model-construction arc grounded in `mission/`. |
-| Block 3, executable scenario walkthroughs | Reviewed | Nominal path, two protective degraded paths and one delayed-backlog path. |
-| Block 4, generated evidence surfaces | Reviewed | Core evidence surfaces and current release-posture wording are aligned. |
-| Block 5, capability coverage review | Reviewed | Matrix covers current Core and Studio Preview 1 boundaries. |
-| Block 6, Studio mission exploration | Reviewed and illustrated | Steps 23 through 27 document only the implemented Preview 1 interaction model using real Reference Mission captures. |
-
-Technical validation remains tied to the model, scenarios and Core-generated evidence.
-
-Studio screenshots are publication assets and do not replace technical validation.
-
 ## Studio Preview 1 boundary
 
 The Studio block intentionally does not document capabilities that are deferred beyond Preview 1:
@@ -161,55 +146,3 @@ The Studio block intentionally does not document capabilities that are deferred 
 - live telemetry or command uplink.
 
 The tutorial may evolve when those capabilities become real and stable enough to describe accurately.
-
-## Screenshot publication set
-
-The published Studio block uses five real application screenshots:
-
-```text
-docs/assets/studio/01-mission-atlas.png
-docs/assets/studio/02-entity-xray-low-battery-warning.png
-docs/assets/studio/03-fdir-context-map.png
-docs/assets/studio/04-operational-state-map.png
-docs/assets/studio/05-mode-focus-payload-active.png
-```
-
-A separate mission-open screenshot was intentionally dropped because it duplicated the Mission Atlas surface without adding engineering information.
-
-The figures are selected and cropped for editorial clarity rather than requiring every publication image to be a full-surface capture.
-
-## Review checklist
-
-When revising the published tutorial, review its content against these questions:
-
-- Does each construction step introduce one clear operational concept?
-- Does each step remain grounded in real files under `mission/` or `scenarios/`?
-- Does the tutorial preserve the separation between source model and generated artifacts?
-- Do the scenario walkthroughs explain causality, not just sequence?
-- Are degraded scenarios presented as expected protective behavior, not as failures?
-- Are runtime-facing outputs clearly separated from flight software?
-- Are ground-facing outputs clearly separated from a ground segment?
-- Are Core candidate surfaces labelled with the correct release posture?
-- Does Studio consume only Core-owned facts rather than reconstructing semantics?
-- Do Studio chapters stay within the real Preview 1 feature set?
-- Can every relationship shown in Studio be traced to an explicit Core-owned relationship record?
-- Are screenshots captured from the real Reference Mission on the documented Preview 1 path?
-
-## Per-step authoring template
-
-Each future tutorial step should answer the same engineering questions:
-
-```text
-What operational problem are we introducing?
-Why does it belong in the mission model or downstream inspection workflow?
-Which source files or Core surfaces does it depend on?
-Which scenario, generated evidence or Studio lens exercises it?
-What evidence confirms it?
-What is deliberately out of scope?
-```
-
-## Current rule
-
-The tutorial is published through Studio Preview 1 and remains structurally complete for that documented baseline.
-
-Future changes should revalidate links, Core surface classifications, exact example baselines and any newly published Studio behavior without expanding the tutorial speculatively.

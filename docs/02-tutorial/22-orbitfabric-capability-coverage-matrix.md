@@ -53,7 +53,7 @@ Each capability should be described as one of:
 | OrbitFabric capability | Tutorial coverage | Status | Notes |
 |---|---|---|---|
 | Generated Markdown documentation | Covered | Strong | Step 17 treats generated docs as reproducible review artifacts. |
-| Lint and validation evidence | Covered | Final command-output check pending | Core command behavior should be revalidated before publication. |
+| Lint and validation evidence | Covered | CI-verified Core lint | Step 17 documents lint and validation; repository CI runs the selected Core lint on `mission/`. |
 | Simulation JSON reports | Covered | Strong | Step 18 treats JSON as machine-readable evidence. |
 | Plain-text scenario logs | Covered | Strong | Step 18 treats logs as human-readable timelines. |
 | `model_summary.json` | Covered | Stable v1 surface | Step 17. |
@@ -86,7 +86,7 @@ The tutorial continues after this matrix with a dedicated Studio block.
 | Context Path | Covered | Preview 1 | Step 25; user-followed path, not inferred causal chain. |
 | Context Map | Covered | Preview 1 | Step 25; only explicit Core-owned relationships. |
 | Explicit FDIR context exploration | Covered | Preview 1 | Step 25 uses the Reference Mission low-power protection context. |
-| Validation Findings | Covered conceptually | Preview 1 | Step 23 establishes lint as a current Studio input; final publication may add a visual cross-reference if useful. |
+| Validation Findings | Covered conceptually | Preview 1 | Step 23 establishes lint as a current Studio input. |
 | Operational State Map | Covered | Preview 1 | Step 26. |
 | Mode Focus | Covered | Preview 1 | Step 26 uses `PAYLOAD_ACTIVE`. |
 | Read-only Mission Model boundary | Covered | Strong | Steps 23 through 27. |

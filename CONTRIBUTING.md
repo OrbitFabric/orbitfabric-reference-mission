@@ -51,6 +51,18 @@ All examples must be synthetic or based only on material that can legally be use
 
 By contributing, you confirm that the contribution is your original work or material you have the legal right to contribute.
 
+## Public engineering artifact boundary
+
+Published repository content must help a reader understand, use, inspect, verify or reproduce the engineering work. This applies to **every Engineering Story** and the Reference Mission tutorial.
+
+Keep source-backed technical investigations, explicit design decisions, verified constraints, negative tests, genuine technical questions, version-pinned evidence and reproducible reference-project assets.
+
+Do not commit prepublication working material: social-media copy, cover-production checklists, temporary approval or sign-off notes, editorial-review tables, authoring plans, chat summaries, transient publishing instructions or release-gate reminders. Such working material belongs outside the public engineering repository.
+
+An unresolved technical limitation is not an editorial TODO. Preserve honest **NOT RUN**, falsified assumptions and pending upstream technical clarifications when they materially qualify the engineering claims.
+
+Before submitting documentation, review the **whole file** for audience relevance. A file's absence from the MkDocs navigation does not make it private.
+
 ## Validation
 
 Before opening a pull request, run the relevant checks locally when possible.

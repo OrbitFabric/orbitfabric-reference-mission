@@ -31,6 +31,27 @@ jobs:
           python -m pip install "git+https://github.com/${ORBITFABRIC_CORE_REPOSITORY}.git@${ORBITFABRIC_CORE_REF}"
           python -m pip install -r requirements-docs.txt
 
+      - name: Check Engineering Stories public artifact boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path("engineering-stories")
+          private_working_directories = {"publication", "prepublication", "editorial-drafts"}
+          prepublication_filenames = {"linkedin-post.md", "cover-asset.md"}
+          offenders = [
+              str(path)
+              for path in root.rglob("*")
+              if path.is_file()
+              and (
+                  any(part.lower() in private_working_directories for part in path.parts)
+                  or path.name.lower() in prepublication_filenames
+              )
+          ]
+          assert not offenders, "Prepublication working artifacts found in public repository: " + ", ".join(offenders)
+          print("Public Engineering Story artifact boundary: PASS")
+          PY
+
       - name: Show OrbitFabric version
         run: orbitfabric --version
 
