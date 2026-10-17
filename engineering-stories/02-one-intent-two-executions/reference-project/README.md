@@ -2,6 +2,8 @@
 
 This is the executable proof package behind R2, **One Intent, Two Executions**.
 
+The [published R2 Front Story](../../../docs/engineering-stories/r2-pwnsat/index.md) explains the investigation. This README describes the maintained Reference Project and its actual publication status; older commit-pinned source snapshots may preserve earlier authorization checkpoints.
+
 The published package spans three deliberately separated layers:
 
 ```text
@@ -224,6 +226,6 @@ runtime/README.md
 
 The published runtime harness includes transport framing/parsing, STATUS validation, the frozen occurrence criterion, additive `0.2-story` runtime contracts, evidence retention, full-phase orchestration, bundle sealing/verification and falsification tests.
 
-Repository CI remains offline-only. It does not open hardware and produces an explicit `NOT_RUN` observation report with no presentation or occurrence evidence. The published candidate has **33/33 runtime tests passing**.
+Repository CI remains offline-only. It does not open hardware and produces an explicit `NOT_RUN` observation report with no presentation or occurrence evidence. The published offline baseline has **33/33 runtime tests passing**.
 
 The bounded offline R2 Story and this Reference Project are **published**. Physical FlatSat execution remains **NOT RUN**, so final runtime-phase acceptance and any live semantic assessment remain pending.
